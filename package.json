@@ -1,0 +1,26 @@
+{
+  "name": "appc.db.mongo",
+  "description": "MongoDB connector",
+  "version": "1.0.0",
+  "author": "Jeff Haynie",
+  "license": "",
+  "framework": "none",
+  "keywords": [
+    "mobware",
+    "mobware-connector"
+  ],
+  "repository": {},
+  "scripts": {
+    "start": "./node_modules/mobware2/bin/mobware2 install && NODE_PATH=$(./node_modules/mobware2/bin/mobware2 npmpath) node ./app.js"
+  },
+  "npmRegistry": "https://appcelerator.registry.nodejitsu.com",
+  "npmAuthentication": true,
+  "dependencies": {
+    "highlight.js": "^8.2.0",
+    "lodash": "^2.4.1",
+    "mobware2": "^1.0.0",
+    "mongodb": "^1.4.9",
+    "pkginfo": "^0.3.0"
+  },
+  "appcelerator": {}
+}

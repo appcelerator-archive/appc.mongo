@@ -1,0 +1,140 @@
+<html>
+<head lang="en">
+	<script src="/jquery/jquery.min.js"></script>
+	<script src="/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/app.js"></script>
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/highlight/default.css">
+	<link rel="stylesheet" href="/highlight/hybrid.css">
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>RESTER</title>
+</head>
+<body>
+<div class="container" style="margin-top:20px;">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h3 class="panel-title">Test your API</h3>
+	  	</div>
+		<div class="panel-body">
+			<div class="row">
+				<div class="col-sm-12">
+					Specify your API request details.
+				</div>
+			</div>
+			<div class="row">&nbsp;</div>
+			<form class="form-horizontal" role="form" >
+			  <div class="form-group url">
+			  	<div class="col-sm-2">
+				  	<select class="form-control method" name="method">
+						<option>GET</option>
+						<option>POST</option>
+						<option>PUT</option>
+						<option>DELETE</option>
+						<option>HEAD</option>
+						<option>PATCH</option>
+						<option>OPTIONS</option>
+					</select>
+				</div>
+			    <div class="col-sm-6">
+			      <input type="url" class="form-control" id="url" placeholder="url" value="https://api.github.com"/>
+			    </div>
+			    <div class="col-sm-4">
+			    	<button type="button" class="btn btn-primary add-header">
+			  			<span class="glyphicon glyphicon-plus"></span> Header
+					</button>
+			    	<button type="button" class="btn btn-primary add-auth">
+			  			<span class="glyphicon glyphicon-plus"></span> Authentication
+					</button>
+			    	<button type="button" class="btn btn-success execute">
+			  			<span class="glyphicon glyphicon-play"></span> Run
+					</button>
+			    </div>
+			  </div>
+			  <div class="form-group hide header-template">
+			  	<div class="col-sm-2">
+			  		<strong>Header:</strong>
+			  	</div>
+			  	<div class="col-sm-2">
+			  		<input type="text" name="header-name" class="form-control" placeholder="name" />
+			  	</div>
+			  	<div class="col-sm-3">
+			  		<input type="text" name="header-value" class="form-control" placeholder="value" />
+			  	</div>
+			    <div class="col-sm-2">
+			    	<button type="button" class="btn btn-danger">
+			  			<span class="glyphicon glyphicon-minus"></span> Remove Header
+					</button>
+			    </div>
+			  </div>
+			  <div class="form-group hide auth-template">
+			  	<div class="col-sm-2">
+			  		<label class="radio-inline">
+					  <input type="radio" name="auth_type" value="basic" checked> Basic
+					</label>
+					<label class="radio-inline">
+					  <input type="radio" name="auth_type" value="digest"> Digest
+					</label>
+			  	</div>
+			  	<div class="col-sm-2">
+			  		<input type="text" name="auth-name" class="form-control" placeholder="username" />
+			  	</div>
+			  	<div class="col-sm-2">
+			  		<input type="password" name="auth-value" class="form-control" placeholder="password" />
+			  	</div>
+			    <div class="col-sm-2">
+			    	<button type="button" class="btn btn-danger">
+			  			<span class="glyphicon glyphicon-minus"></span> Remove
+					</button>
+			    </div>
+			  </div>
+			  <div class="body hide">
+				  <div class="form-group">
+				  	<div class="col-sm-2">
+				  		<strong>Body Content Type:</strong>
+				  	</div>
+				  	<div class="col-sm-5">
+					  	<select class="form-control" name="content-type">
+							<option>application/json</option>
+							<option>text/plain</option>
+							<option>application/x-www-form-urlencoded</option>
+						</select>
+					</div>
+				  </div>
+				  <div class="form-group">
+				  	<div class="col-sm-2">
+				  		<strong>Body Content:</strong>
+				  	</div>
+				  	<div class="col-sm-5">
+					  	<textarea name="body" class="form-control" rows="5">{"a":"b"}</textarea>
+					</div>
+					<div class="col-sm-2">
+						<div class="hide"><span class="label label-success"><span class="glyphicon glyphicon-ok"></span> <span class="reason">Looks good</span></span></div>
+						<div class="hide"><span class="label label-danger"><span class="glyphicon glyphicon-remove"></span> <span class="reason">Oops</span></span></div>
+					</div>
+				  </div>
+			  </div>
+			  <div class="row">
+			  	<div class="col-sm-12">
+			  		<input type="checkbox" name="redirects" checked/> <span>Follow Redirects</span>
+
+			  		<span>&nbsp;&nbsp;</span>
+
+			  		<input type="checkbox" name="uncompress" checked/> <span> Uncompress Response</span>
+			  	</div>
+			  </div>
+			</form>
+		</div>
+	</div>	
+	<div class="panel panel-default result hide" id="response_body">
+		<div class="panel-heading">
+			<h3 class="panel-title">Result</h3>
+	  	</div>
+		<div class="panel-body result-body">
+			Your result will go here. One moment...
+		</div>
+	</div>
+</div>
+</body>
+</html>
