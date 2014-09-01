@@ -3,7 +3,7 @@
   "description": "MongoDB connector",
   "version": "1.0.0",
   "author": "Jeff Haynie",
-  "license": "",
+  "license": "Apache2",
   "framework": "none",
   "keywords": [
     "mobware",
@@ -13,8 +13,7 @@
   "scripts": {
     "start": "./node_modules/mobware2/bin/mobware2 install && NODE_PATH=$(./node_modules/mobware2/bin/mobware2 npmpath) node ./app.js"
   },
-  "npmRegistry": "https://appcelerator.registry.nodejitsu.com",
-  "npmAuthentication": true,
+  "private": true,
   "dependencies": {
     "highlight.js": "^8.2.0",
     "lodash": "^2.4.1",
