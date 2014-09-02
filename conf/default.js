@@ -6,5 +6,6 @@ module.exports = {
 	admin: {
 		enabled: true,
 		prefix: '/mobware'
-	}
+	},
+  url: 'mongodb://localhost/mobware'
 };
