@@ -88,8 +88,8 @@ describe("Connector", function () {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 			should(instance.getPrimaryKey()).be.a.String;
-			should(instance.get('content')).equal(content);
-			should(instance.get('title')).equal(title);
+			should(instance.content).equal(content);
+			should(instance.title).equal(title);
 			instance.delete(next);
 		});
 
@@ -122,8 +122,8 @@ describe("Connector", function () {
 				should(err).be.not.ok;
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(id);
-				should(instance2.get('title')).equal(title);
-				should(instance2.get('content')).equal(content);
+				should(instance2.title).equal(title);
+				should(instance2.content).equal(content);
 				instance.delete(next);
 			});
 
@@ -149,8 +149,8 @@ describe("Connector", function () {
 				should(err).be.not.ok;
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(instance.getPrimaryKey());
-				should(instance2.get('title')).equal(title);
-				should(instance2.get('content')).equal(content);
+				should(instance2.title).equal(title);
+				should(instance2.content).equal(content);
 				instance.delete(next);
 			});
 
@@ -222,8 +222,8 @@ describe("Connector", function () {
 
 					should(result).be.an.object;
 					should(result.getPrimaryKey()).equal(id);
-					should(result.get('title')).equal(title);
-					should(result.get('content')).equal('Goodbye world');
+					should(result.title).equal(title);
+					should(result.content).equal('Goodbye world');
 					instance.delete(next);
 				});
 
