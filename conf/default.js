@@ -7,5 +7,5 @@ module.exports = {
 		enabled: true,
 		prefix: '/mobware'
 	},
-  url: 'mongodb://localhost/mobware'
+	url: 'mongodb://localhost/mobware'
 };
