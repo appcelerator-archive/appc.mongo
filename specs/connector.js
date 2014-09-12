@@ -180,15 +180,18 @@ describe("Connector", function () {
 			});
 
 			Model.find(function(err, coll2) {
-				// TODO - check with Jeff whether Model.findAll ought to return a collection wrapper like Model.create does for arrays
 				should(err).be.not.ok;
 				should(coll2.length).equal(coll.length);
 
+				var array = [];
+
 				coll2.forEach(function(post, i) {
 					should(post.getPrimaryKey()).equal(keys[i]);
+					array.push(post);
 				});
 
-				async.eachSeries(coll2, function(post, next_) {
+				async.eachSeries(array, function(post, next_) {
+					should(post).be.an.object;
 					post.delete(next_);
 				}, function(err) {
 					next(err);
