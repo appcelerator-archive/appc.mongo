@@ -33,7 +33,7 @@ describe("Connector", function () {
 			}
 		});
 
-		should(Model).should.be.an.object;
+		should(Model).be.an.object;
 
 		connector.connect(next);
 	});
