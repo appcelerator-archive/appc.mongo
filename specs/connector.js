@@ -158,6 +158,40 @@ describe("Connector", function () {
 
 	});
 
+	it("should be able to query", function (callback) {
+
+		var content = 'Hello world',
+			title = 'Test',
+			object = {
+				content: content,
+				title: title
+			};
+
+		Model.create(object, function (err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+
+			var options = {
+				where: { content: { $like: 'Hello%' } },
+				sel: { _id: 1, content: 1 },
+				order: { content: 1, title: -1 },
+				limit: 3,
+				skip: 0
+			};
+			Model.query(options, function(err, coll) {
+				should(err).be.not.ok;
+
+				async.eachSeries(coll, function(obj, next) {
+					should(obj.getPrimaryKey()).be.a.string;
+					should(obj.content).be.a.string;
+					should(obj.title).be.not.ok;
+					obj.remove(next);
+				}, callback);
+			});
+		});
+
+	});
+
 	it("should be able to find all instances", function (next) {
 
 		var posts = [
