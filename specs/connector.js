@@ -145,8 +145,9 @@ describe("Connector", function () {
 			should(instance).be.an.object;
 
 			var query = { title: title };
-			Model.find(query, function(err, instance2) {
+			Model.find(query, function(err, coll) {
 				should(err).be.not.ok;
+				var instance2 = coll[0];
 				should(instance2).be.an.object;
 				should(instance2.getPrimaryKey()).equal(instance.getPrimaryKey());
 				should(instance2.title).equal(title);
