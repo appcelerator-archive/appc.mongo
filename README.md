@@ -5,13 +5,13 @@ This is a Mobware connector to MongoDB.
 To install:
 
 ```bash
-$ mobware2 install appc.db.mongo --save
+$ appc install appc.mongo --save
 ```
 
 Use in your application:
 
 ```javascript
-var MongoDB = require('appc.db.mongo'),
+var MongoDB = require('appc.mongo'),
 		connector = new MongoDB({
 				url: 'mongodb://localhost/mobware'
 		});

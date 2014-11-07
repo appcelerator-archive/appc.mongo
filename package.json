@@ -1,5 +1,5 @@
 {
-	"name": "appc.db.mongo",
+	"name": "appc.mongo",
 	"description": "MongoDB connector",
 	"version": "1.0.0",
 	"author": "Jeff Haynie",
