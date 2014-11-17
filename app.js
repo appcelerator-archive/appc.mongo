@@ -1,6 +1,6 @@
 var APIBuilder = require('apibuilder'),
 	server = new APIBuilder(),
-	Connector = require('./lib'),
+	Connector = require('./lib').create(APIBuilder),
 	connector = new Connector({
 		url: 'mongodb://localhost/mobware'
 	});
@@ -38,7 +38,7 @@ function APIKeyAuthorization(req, resp, next) {
 
 //--------------------- simple user model ---------------------//
 
-var User = APIBuilder.createModel('user',{
+var User = APIBuilder.Model.extend('user',{
 	fields: {
 		name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ }
 	},

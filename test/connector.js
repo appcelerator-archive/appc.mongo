@@ -2,12 +2,10 @@ var should = require('should'),
 	async = require('async'),
 	url = require('url'),
 	shortId = require('shortid'),
-	Connector = require('../'),
 	APIBuilder = require('apibuilder'),
+	Connector = require('../').create(APIBuilder),
 	log = APIBuilder.createLogger({}, {name: 'api-connector-mongo TEST', useConsole: true, level: 'info'}),
-	Loader = APIBuilder.Loader,
-	config = new Loader('../conf'),
-	connector = new Connector(config),
+	connector = new Connector(),
 	Model;
 
 describe("Connector", function () {
