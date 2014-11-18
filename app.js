@@ -1,6 +1,6 @@
 var APIBuilder = require('apibuilder'),
 	server = new APIBuilder(),
-	Connector = require('./lib').create(APIBuilder),
+	Connector = require('./lib').create(APIBuilder, server),
 	connector = new Connector({
 		url: 'mongodb://localhost/mobware'
 	});
