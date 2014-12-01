@@ -41,7 +41,7 @@ function APIKeyAuthorization(req, resp, next) {
 
 var User = APIBuilder.Model.extend('user',{
 	fields: {
-		name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ }
+		name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 	},
 	connector: connector,	// a model level connector
 	metadata: {

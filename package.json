@@ -1,7 +1,7 @@
 {
 	"name": "appc.mongo",
 	"description": "MongoDB connector",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"author": "Jeff Haynie",
 	"maintainers": [
 		"jhaynie <jhaynie@appcelerator.com>",
@@ -20,7 +20,7 @@
 	},
 	"private": true,
 	"dependencies": {
-		"appc-cli-core": "*",
+		"appcelerator": "*",
 		"highlight.js": "^8.2.0",
 		"mongodb": "^1.4.9",
 		"pkginfo": "^0.3.0",

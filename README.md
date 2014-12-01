@@ -24,8 +24,8 @@ Now reference the connector in your model.
 ```javascript
 var User = APIBuilder.createModel('user',{
 		fields: {
-				_id: {type:'string', required: true, primary: true},
-				name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ }
+				_id: { type: String, required: true, primary: true},
+				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 		},
 		connector: connector
 });
@@ -36,8 +36,8 @@ If you want to map a specific model to a specific collection name, use metadata.
 ```javascript
 var User = APIBuilder.createModel('user',{
 		fields: {
-				_id: {type:'string', required: true, primary: true},
-				name: {type:'string', required: false, validator: /[a-zA-Z]{3,}/ }
+				_id: { type: String, required: true, primary: true},
+				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 		},
 		connector: connector,
 		metadata: {
