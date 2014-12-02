@@ -4,13 +4,13 @@ var should = require('should'),
 	shortId = require('shortid'),
 	APIBuilder = require('apibuilder'),
 	Connector = require('../').create(APIBuilder),
-	log = APIBuilder.createLogger({}, {name: 'api-connector-mongo TEST', useConsole: true, level: 'info'}),
+	log = APIBuilder.createLogger({}, { name: 'api-connector-mongo TEST', useConsole: true, level: 'info' }),
 	connector = new Connector(),
 	Model;
 
-describe("Connector", function () {
+describe("Connector", function() {
 
-	before(function (next) {
+	before(function(next) {
 		var mongoUrl = url.parse(connector.config.url);
 		mongoUrl.pathname = mongoUrl.pathname + '-' + shortId.generate();
 		connector.config.url = url.format(mongoUrl);
@@ -20,8 +20,8 @@ describe("Connector", function () {
 		// define your model
 		Model = APIBuilder.Model.extend('post', {
 			fields: {
-				title: {type: String},
-				content: {type: String}
+				title: { type: String },
+				content: { type: String }
 			},
 			connector: connector,
 			metadata: {
@@ -36,7 +36,7 @@ describe("Connector", function () {
 		connector.connect(next);
 	});
 
-	after(function (next) {
+	after(function(next) {
 		connector.db.dropDatabase(function(err, done) {
 			if (err) {
 				log.error(err.message);
@@ -47,8 +47,8 @@ describe("Connector", function () {
 		});
 	});
 
-	it("should be able to fetch config", function (next) {
-		connector.fetchConfig(function (err, config) {
+	it("should be able to fetch config", function(next) {
+		connector.fetchConfig(function(err, config) {
 			should(err).be.not.ok;
 			should(config).be.an.object;
 			should(Object.keys(config)).containEql('url');
@@ -56,8 +56,8 @@ describe("Connector", function () {
 		});
 	});
 
-	it("should be able to fetch metadata", function (next) {
-		connector.fetchMetadata(function (err, meta) {
+	it("should be able to fetch metadata", function(next) {
+		connector.fetchMetadata(function(err, meta) {
 			should(err).be.not.ok;
 			should(meta).be.an.object;
 			should(Object.keys(meta)).containEql('fields');
@@ -65,15 +65,15 @@ describe("Connector", function () {
 		});
 	});
 
-	it("should be able to fetch schema", function (next) {
-		connector.fetchSchema(function (err, schema) {
+	it("should be able to fetch schema", function(next) {
+		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
 			should(schema).be.an.object;
 			next();
 		});
 	});
 
-	it("should be able to create instance", function (next) {
+	it("should be able to create instance", function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -82,7 +82,7 @@ describe("Connector", function () {
 				title: title
 			};
 
-		Model.create(object, function (err, instance) {
+		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 			should(instance.getPrimaryKey()).be.a.String;
@@ -93,8 +93,8 @@ describe("Connector", function () {
 
 	});
 
-	it("should be able to fetch schema with posts collection", function (next) {
-		connector.fetchSchema(function (err, schema) {
+	it("should be able to fetch schema with posts collection", function(next) {
+		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
 			should(schema).be.an.object;
 			should(schema.objects.Posts.schemaless).be.true;
@@ -102,7 +102,35 @@ describe("Connector", function () {
 		});
 	});
 
-	it("should be able to find an instance by ID", function (next) {
+	it('should be able to map fields', function(next) {
+
+		var Model = APIBuilder.Model.extend('account', {
+			fields: {
+				SuperName: { name: 'Name', type: String }
+			},
+			connector: connector
+		});
+		var name = 'TEST: Hello world',
+			object = {
+				SuperName: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.object;
+			should(instance.SuperName).equal(name);
+			instance.set('SuperName', name + 'v2');
+			instance.save(function(err, result) {
+				Model.findAll(function(err, coll) {
+					should(coll[0].SuperName).equal(name + 'v2');
+					instance.delete(next);
+				});
+			});
+		});
+
+	});
+
+	it("should be able to find an instance by ID", function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -111,7 +139,7 @@ describe("Connector", function () {
 				title: title
 			};
 
-		Model.create(object, function (err, instance) {
+		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
@@ -129,7 +157,7 @@ describe("Connector", function () {
 
 	});
 
-	it("should be able to find an instance by field value", function (next) {
+	it("should be able to find an instance by field value", function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -138,7 +166,7 @@ describe("Connector", function () {
 				title: title
 			};
 
-		Model.create(object, function (err, instance) {
+		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
@@ -157,7 +185,7 @@ describe("Connector", function () {
 
 	});
 
-	it("should be able to query", function (callback) {
+	it("should be able to query", function(callback) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -166,7 +194,7 @@ describe("Connector", function () {
 				title: title
 			};
 
-		Model.create(object, function (err, instance) {
+		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
@@ -191,7 +219,7 @@ describe("Connector", function () {
 
 	});
 
-	it("should be able to find all instances", function (next) {
+	it("should be able to find all instances", function(next) {
 
 		var posts = [
 			{
@@ -203,7 +231,7 @@ describe("Connector", function () {
 				content: 'Goodbye world'
 			}];
 
-		Model.create(posts, function (err, coll) {
+		Model.create(posts, function(err, coll) {
 			should(err).be.not.ok;
 			should(coll.length).equal(posts.length);
 
@@ -235,7 +263,7 @@ describe("Connector", function () {
 
 	});
 
-	it("should be able to update an instance", function (next) {
+	it("should be able to update an instance", function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -244,7 +272,7 @@ describe("Connector", function () {
 				title: title
 			};
 
-		Model.create(object, function (err, instance) {
+		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
 			should(instance).be.an.object;
 
