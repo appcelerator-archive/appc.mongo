@@ -1,4 +1,4 @@
-var APIBuilder = require('apibuilder'),
+var APIBuilder = require('appcelerator').apibuilder,
 	server = new APIBuilder(),
 	ConnectorFactory = require('./lib'),
 	Connector = ConnectorFactory.create(APIBuilder, server),
