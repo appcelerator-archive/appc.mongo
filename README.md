@@ -41,7 +41,7 @@ var User = APIBuilder.createModel('user',{
 		},
 		connector: connector,
 		metadata: {
-				mongodb: {
+				'appc.mongodb': {
 						collection: 'users'
 				}
 		}

@@ -25,7 +25,7 @@ describe("Connector", function() {
 			},
 			connector: connector,
 			metadata: {
-				mongodb: {
+				'appc.mongodb': {
 					collection: 'Posts'
 				}
 			}

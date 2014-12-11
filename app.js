@@ -45,7 +45,7 @@ var User = APIBuilder.Model.extend('user',{
 	},
 	connector: connector,	// a model level connector
 	metadata: {
-		mongodb: {
+		'appc.mongodb': {
 			collection: 'users'
 		}
 	}
