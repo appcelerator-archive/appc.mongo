@@ -46,16 +46,7 @@ describe("Connector", function() {
 			connector.disconnect(next);
 		});
 	});
-
-	it("should be able to fetch config", function(next) {
-		connector.fetchConfig(function(err, config) {
-			should(err).be.not.ok;
-			should(config).be.an.object;
-			should(Object.keys(config)).containEql('url');
-			next();
-		});
-	});
-
+	
 	it("should be able to fetch metadata", function(next) {
 		connector.fetchMetadata(function(err, meta) {
 			should(err).be.not.ok;
@@ -97,7 +88,7 @@ describe("Connector", function() {
 		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
 			should(schema).be.an.object;
-			should(schema.objects.Posts.schemaless).be.true;
+			should(schema.objects.post.schemaless).be.true;
 			next();
 		});
 	});
