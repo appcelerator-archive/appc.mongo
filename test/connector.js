@@ -3,19 +3,24 @@ var should = require('should'),
 	url = require('url'),
 	shortId = require('shortid'),
 	APIBuilder = require('appcelerator').apibuilder,
-	Connector = require('../lib').create(APIBuilder),
-	connector = new Connector(),
+	server = new APIBuilder(),
+	connector,
 	log = APIBuilder.createLogger({}, { name: 'api-connector-mongo TEST', useConsole: true, level: 'info' }),
 	Model;
 
 describe("Connector", function() {
 
 	before(function(next) {
-		var mongoUrl = url.parse(connector.config.url);
-		mongoUrl.pathname = mongoUrl.pathname + '-' + shortId.generate();
-		connector.config.url = url.format(mongoUrl);
-		log.info('Mongo connection for test: ' + connector.config.url);
-
+		connector = server.getConnector('appc.mongo');
+		if (connector.config.url) {
+			var mongoUrl = url.parse(connector.config.url);
+			mongoUrl.pathname = mongoUrl.pathname + '-' + shortId.generate();
+			connector.config.url = url.format(mongoUrl);
+			log.info('Mongo connection for test: ' + connector.config.url);
+		}
+		else {
+			// The metadata will fail for us. Carry on.
+		}
 
 		// define your model
 		Model = APIBuilder.Model.extend('post', {
@@ -23,17 +28,16 @@ describe("Connector", function() {
 				title: { type: String },
 				content: { type: String }
 			},
-			connector: connector,
+			connector: 'appc.mongo',
 			metadata: {
-				'appc.mongodb': {
+				'appc.mongo': {
 					collection: 'Posts'
 				}
 			}
 		});
 
 		should(Model).be.an.object;
-
-		connector.connect(next);
+		next();
 	});
 
 	after(function(next) {
@@ -88,7 +92,7 @@ describe("Connector", function() {
 		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
 			should(schema).be.an.object;
-			should(schema.objects.post.schemaless).be.true;
+			should(schema.objects.Posts.schemaless).be.true;
 			next();
 		});
 	});

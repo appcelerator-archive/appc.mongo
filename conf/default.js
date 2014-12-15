@@ -3,9 +3,16 @@ module.exports = {
 	quiet: false,
 	logLevel: 'debug',
 	apikey: 'bYVrelF3EQ8qGaJj/SoSlTyP6IhtA+1Y',
+	requireSessionLogin: false,
 	admin: {
 		enabled: true,
-		prefix: '/mobware'
+		prefix: '/apibuilder'
 	},
-	url: 'mongodb://localhost/mobware'
+	connectors: {
+		'appc.mongo': {
+			config: {
+				url: 'mongodb://localhost/mobware'
+			}
+		}
+	}
 };
