@@ -1,7 +1,7 @@
 module.exports = {
 	connectors: {
 		'appc.mongo': {
-			url: 'mongodb://localhost/mobware'
+			url: 'mongodb://localhost/apibuilder'
 		}
 	}
 };

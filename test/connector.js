@@ -118,7 +118,7 @@ describe("Connector", function() {
 			fields: {
 				SuperName: { name: 'Name', type: String }
 			},
-			connector: connector
+			connector: 'appc.mongo'
 		});
 		var name = 'TEST: Hello world',
 			object = {

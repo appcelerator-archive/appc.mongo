@@ -1,4 +1,4 @@
-# Mobware MongoDB Connector
+# MongoDB Connector
 
 This is a APIBuilder connector to MongoDB.
 
@@ -7,16 +7,7 @@ This is a APIBuilder connector to MongoDB.
 To install:
 
 ```bash
-$ appc install appc.mongo --save
-```
-
-Use in your application:
-
-```javascript
-var MongoDB = require('appc.mongo'),
-		connector = new MongoDB({
-				url: 'mongodb://localhost/mobware'
-		});
+$ appc install connector/appc.mongo --save
 ```
 
 Now reference the connector in your model.
@@ -27,7 +18,7 @@ var User = APIBuilder.createModel('user',{
 				_id: { type: String, required: true, primary: true},
 				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 		},
-		connector: connector
+		connector: 'appc.mongo'
 });
 ```
 
@@ -39,7 +30,7 @@ var User = APIBuilder.createModel('user',{
 				_id: { type: String, required: true, primary: true},
 				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 		},
-		connector: connector,
+		connector: 'appc.mongo',
 		metadata: {
 				'appc.mongo': {
 						collection: 'users'
