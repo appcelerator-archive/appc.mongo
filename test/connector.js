@@ -11,18 +11,8 @@ var should = require('should'),
 describe("Connector", function() {
 
 	before(function(next) {
-		connector = server.getConnector('appc.mongo');
-		if (connector.config.url) {
-			var mongoUrl = url.parse(connector.config.url);
-			mongoUrl.pathname = mongoUrl.pathname + '-' + shortId.generate();
-			connector.config.url = url.format(mongoUrl);
-			log.info('Mongo connection for test: ' + connector.config.url);
-		}
-		else {
-			// The metadata will fail for us. Carry on.
-		}
 
-		// define your model
+		// define a model.
 		Model = APIBuilder.Model.extend('post', {
 			fields: {
 				title: { type: String },
@@ -35,22 +25,42 @@ describe("Connector", function() {
 				}
 			}
 		});
-
 		should(Model).be.an.object;
-		next();
+
+		// set up our mongo connection.
+		connector = server.getConnector('appc.mongo');
+		if (connector.config.url) {
+			var mongoUrl = url.parse(connector.config.url);
+			mongoUrl.pathname = mongoUrl.pathname + '-' + shortId.generate();
+			connector.config.url = url.format(mongoUrl);
+			log.info('Mongo connection for test: ' + connector.config.url);
+			// Create a test collection.
+			require('mongodb').MongoClient.connect(connector.config.url, function didConnect(err, db) {
+				if (err) {
+					return next(err);
+				}
+				db.collection('super_post').insert({ Hello: 'World!' }, function() {
+					server.start(next);
+				});
+			});
+		}
+		else {
+			// The metadata will fail for us. Carry on.
+			server.start(next);
+		}
 	});
 
 	after(function(next) {
-		connector.db.dropDatabase(function(err, done) {
+		connector.db.dropDatabase(function(err) {
 			if (err) {
 				log.error(err.message);
 			} else {
 				log.info('Dropped test database at: ' + connector.config.url);
 			}
-			connector.disconnect(next);
+			server.stop(next);
 		});
 	});
-	
+
 	it("should be able to fetch metadata", function(next) {
 		connector.fetchMetadata(function(err, meta) {
 			should(err).be.not.ok;
@@ -66,6 +76,11 @@ describe("Connector", function() {
 			should(schema).be.an.object;
 			next();
 		});
+	});
+
+	it('API-320: should create models from tables', function() {
+		var SuperPost = connector.getModel('appc.mongo/super_post');
+		should(SuperPost).be.ok;
 	});
 
 	it("should be able to create instance", function(next) {
