@@ -241,34 +241,37 @@ describe("Connector", function() {
 				content: 'Goodbye world'
 			}];
 
-		Model.create(posts, function(err, coll) {
+		Model.deleteAll(function(err) {
 			should(err).be.not.ok;
-			should(coll.length).equal(posts.length);
-
-			var keys = [];
-			coll.forEach(function(post) {
-				keys.push(post.getPrimaryKey());
-			});
-
-			Model.find(function(err, coll2) {
+			Model.create(posts, function(err, coll) {
 				should(err).be.not.ok;
-				should(coll2.length).equal(coll.length);
+				should(coll.length).equal(posts.length);
 
-				var array = [];
-
-				coll2.forEach(function(post, i) {
-					should(post.getPrimaryKey()).equal(keys[i]);
-					array.push(post);
+				var keys = [];
+				coll.forEach(function(post) {
+					keys.push(post.getPrimaryKey());
 				});
 
-				async.eachSeries(array, function(post, next_) {
-					should(post).be.an.object;
-					post.delete(next_);
-				}, function(err) {
-					next(err);
+				Model.find(function(err, coll2) {
+					should(err).be.not.ok;
+					should(coll2.length).equal(coll.length);
+
+					var array = [];
+
+					coll2.forEach(function(post, i) {
+						should(post.getPrimaryKey()).equal(keys[i]);
+						array.push(post);
+					});
+
+					async.eachSeries(array, function(post, next_) {
+						should(post).be.an.object;
+						post.delete(next_);
+					}, function(err) {
+						next(err);
+					});
 				});
+
 			});
-
 		});
 
 	});
