@@ -25,7 +25,7 @@ describe("Connector", function() {
 				}
 			}
 		});
-		should(Model).be.an.object;
+		should(Model).be.an.Object;
 
 		// set up our mongo connection.
 		connector = server.getConnector('appc.mongo');
@@ -39,7 +39,15 @@ describe("Connector", function() {
 				if (err) {
 					return next(err);
 				}
-				db.collection('super_post').insert({ Hello: 'World!' }, function() {
+				db.collection('super_post').insert([
+					{ Hello: 'world!', Foo: 2 },
+					{ Hello: 'sun!', Foo: 5 },
+					{ divergentDocument: true },
+					{ Hello: 'sky!', Foo: 7 },
+					{ Hello: 'Earth!', Foo: 1 },
+					{ Hello: 'birds!', Foo: 3 },
+					{ How: 'are you today?!', Foo: 3 }
+				], function() {
 					server.start(next);
 				});
 			});
@@ -64,7 +72,7 @@ describe("Connector", function() {
 	it("should be able to fetch metadata", function(next) {
 		connector.fetchMetadata(function(err, meta) {
 			should(err).be.not.ok;
-			should(meta).be.an.object;
+			should(meta).be.an.Object;
 			should(Object.keys(meta)).containEql('fields');
 			next();
 		});
@@ -73,7 +81,7 @@ describe("Connector", function() {
 	it("should be able to fetch schema", function(next) {
 		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
-			should(schema).be.an.object;
+			should(schema).be.an.Object;
 			next();
 		});
 	});
@@ -81,6 +89,15 @@ describe("Connector", function() {
 	it('API-320: should create models from tables', function() {
 		var SuperPost = connector.getModel('appc.mongo/super_post');
 		should(SuperPost).be.ok;
+		should(SuperPost.fields).be.ok;
+		should(Object.keys(SuperPost.fields).length).equal(2);
+		should(SuperPost.fields._id).be.not.ok;
+		should(SuperPost.fields.Hello).be.ok;
+		should(SuperPost.fields.Hello.type).be.ok;
+		should(SuperPost.fields.Hello.type).equal('string');
+		should(SuperPost.fields.Foo).be.ok;
+		should(SuperPost.fields.Foo.type).be.ok;
+		should(SuperPost.fields.Foo.type).equal('number');
 	});
 
 	it("should be able to create instance", function(next) {
@@ -94,7 +111,7 @@ describe("Connector", function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 			should(instance.getPrimaryKey()).be.a.String;
 			should(instance.content).equal(content);
 			should(instance.title).equal(title);
@@ -106,7 +123,7 @@ describe("Connector", function() {
 	it("should be able to fetch schema with posts collection", function(next) {
 		connector.fetchSchema(function(err, schema) {
 			should(err).be.not.ok;
-			should(schema).be.an.object;
+			should(schema).be.an.Object;
 			should(schema.objects.Posts.schemaless).be.true;
 			next();
 		});
@@ -127,7 +144,7 @@ describe("Connector", function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 			should(instance.SuperName).equal(name);
 			instance.set('SuperName', name + 'v2');
 			instance.save(function(err, result) {
@@ -151,12 +168,12 @@ describe("Connector", function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 
 			var id = instance.getPrimaryKey();
 			Model.find(id, function(err, instance2) {
 				should(err).be.not.ok;
-				should(instance2).be.an.object;
+				should(instance2).be.an.Object;
 				should(instance2.getPrimaryKey()).equal(id);
 				should(instance2.title).equal(title);
 				should(instance2.content).equal(content);
@@ -178,13 +195,13 @@ describe("Connector", function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 
 			var query = { title: title };
 			Model.find(query, function(err, coll) {
 				should(err).be.not.ok;
 				var instance2 = coll[0];
-				should(instance2).be.an.object;
+				should(instance2).be.an.Object;
 				should(instance2.getPrimaryKey()).equal(instance.getPrimaryKey());
 				should(instance2.title).equal(title);
 				should(instance2.content).equal(content);
@@ -206,7 +223,7 @@ describe("Connector", function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 
 			var options = {
 				where: { content: { $like: 'Hello%' } },
@@ -264,7 +281,7 @@ describe("Connector", function() {
 					});
 
 					async.eachSeries(array, function(post, next_) {
-						should(post).be.an.object;
+						should(post).be.an.Object;
 						post.delete(next_);
 					}, function(err) {
 						next(err);
@@ -287,7 +304,7 @@ describe("Connector", function() {
 
 		Model.create(object, function(err, instance) {
 			should(err).be.not.ok;
-			should(instance).be.an.object;
+			should(instance).be.an.Object;
 
 			var id = instance.getPrimaryKey();
 			Model.find(id, function(err, instance2) {
@@ -297,7 +314,7 @@ describe("Connector", function() {
 				instance2.save(function(err, result) {
 					should(err).be.not.ok;
 
-					should(result).be.an.object;
+					should(result).be.an.Object;
 					should(result.getPrimaryKey()).equal(id);
 					should(result.title).equal(title);
 					should(result.content).equal('Goodbye world');
