@@ -327,22 +327,24 @@ describe("Connector", function() {
 
 	});
 
+	var cities = [
+		{ city: 'Palo Alto' },
+		{ city: 'Lake Tahoe' },
+		{ city: 'Half Moon Bay' },
+		{ city: 'Chicago' },
+		{ city: 'Houston' },
+		{ city: 'Fresno' },
+		{ city: 'Paris' },
+		{ city: 'Rome' }
+	];
+	
 	it("API-371: should be able to query with $like", function(next) {
 
 		var Model = APIBuilder.Model.extend('city', {
 			fields: { city: { type: String } },
 			connector: 'appc.mongo'
 		});
-		Model.create([
-			{ city: 'Palo Alto' },
-			{ city: 'Lake Tahoe' },
-			{ city: 'Half Moon Bay' },
-			{ city: 'Chicago' },
-			{ city: 'Houston' },
-			{ city: 'Fresno' },
-			{ city: 'Paris' },
-			{ city: 'Rome' }
-		], function(err) {
+		Model.create(cities, function(err) {
 			should(err).be.not.ok;
 
 			Model.query({
@@ -352,6 +354,26 @@ describe("Connector", function() {
 				should(err).be.not.ok;
 				should(coll.length).equal(1);
 				should(coll[0].city).equal('Fresno');
+				Model.deleteAll(next);
+			});
+
+		});
+
+	});
+
+	it("API-372: should order properly", function(next) {
+
+		var Model = APIBuilder.Model.extend('city', {
+			fields: { city: { type: String } },
+			connector: 'appc.mongo'
+		});
+		Model.create(cities, function(err) {
+			should(err).be.not.ok;
+
+			Model.query({ order: { city: '-1' } }, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll[0].city).equal('Rome');
+				should(coll[cities.length - 1].city).equal('Chicago');
 				Model.deleteAll(next);
 			});
 
