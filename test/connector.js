@@ -327,4 +327,36 @@ describe("Connector", function() {
 
 	});
 
+	it("API-371: should be able to query with $like", function(next) {
+
+		var Model = APIBuilder.Model.extend('city', {
+			fields: { city: { type: String } },
+			connector: 'appc.mongo'
+		});
+		Model.create([
+			{ city: 'Palo Alto' },
+			{ city: 'Lake Tahoe' },
+			{ city: 'Half Moon Bay' },
+			{ city: 'Chicago' },
+			{ city: 'Houston' },
+			{ city: 'Fresno' },
+			{ city: 'Paris' },
+			{ city: 'Rome' }
+		], function(err) {
+			should(err).be.not.ok;
+
+			Model.query({
+				where: { city: { $like: '%o' } },
+				page: 2, per_page: 2
+			}, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll.length).equal(1);
+				should(coll[0].city).equal('Fresno');
+				Model.deleteAll(next);
+			});
+
+		});
+
+	});
+
 });
