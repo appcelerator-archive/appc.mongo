@@ -1,18 +1,12 @@
 var should = require('should'),
+	common = require('./common'),
 	async = require('async'),
-	url = require('url'),
-	shortId = require('shortid'),
-	APIBuilder = require('appcelerator').apibuilder,
-	server = new APIBuilder(),
-	connector,
-	log = APIBuilder.createLogger({}, { name: 'api-connector-mongo TEST', useConsole: true, level: 'info' }),
+	APIBuilder = common.APIBuilder,
 	Model;
 
-describe("Connector", function() {
+describe('CRUD', function() {
 
-	before(function(next) {
-
-		// define a model.
+	before(function() {
 		Model = APIBuilder.Model.extend('post', {
 			fields: {
 				title: { type: String },
@@ -26,81 +20,9 @@ describe("Connector", function() {
 			}
 		});
 		should(Model).be.an.Object;
-
-		// set up our mongo connection.
-		connector = server.getConnector('appc.mongo');
-		if (connector.config.url) {
-			var mongoUrl = url.parse(connector.config.url);
-			mongoUrl.pathname = mongoUrl.pathname + '-' + shortId.generate();
-			connector.config.url = url.format(mongoUrl);
-			log.info('Mongo connection for test: ' + connector.config.url);
-			// Create a test collection.
-			require('mongodb').MongoClient.connect(connector.config.url, function didConnect(err, db) {
-				if (err) {
-					return next(err);
-				}
-				db.collection('super_post').insert([
-					{ Hello: 'world!', Foo: 2 },
-					{ Hello: 'sun!', Foo: 5 },
-					{ divergentDocument: true },
-					{ Hello: 'sky!', Foo: 7 },
-					{ Hello: 'Earth!', Foo: 1 },
-					{ Hello: 'birds!', Foo: 3 },
-					{ How: 'are you today?!', Foo: 3 }
-				], function() {
-					server.start(next);
-				});
-			});
-		}
-		else {
-			// The metadata will fail for us. Carry on.
-			server.start(next);
-		}
 	});
 
-	after(function(next) {
-		connector.db.dropDatabase(function(err) {
-			if (err) {
-				log.error(err.message);
-			} else {
-				log.info('Dropped test database at: ' + connector.config.url);
-			}
-			server.stop(next);
-		});
-	});
-
-	it("should be able to fetch metadata", function(next) {
-		connector.fetchMetadata(function(err, meta) {
-			should(err).be.not.ok;
-			should(meta).be.an.Object;
-			should(Object.keys(meta)).containEql('fields');
-			next();
-		});
-	});
-
-	it("should be able to fetch schema", function(next) {
-		connector.fetchSchema(function(err, schema) {
-			should(err).be.not.ok;
-			should(schema).be.an.Object;
-			next();
-		});
-	});
-
-	it('API-320: should create models from tables', function() {
-		var SuperPost = connector.getModel('appc.mongo/super_post');
-		should(SuperPost).be.ok;
-		should(SuperPost.fields).be.ok;
-		should(Object.keys(SuperPost.fields).length).equal(2);
-		should(SuperPost.fields._id).be.not.ok;
-		should(SuperPost.fields.Hello).be.ok;
-		should(SuperPost.fields.Hello.type).be.ok;
-		should(SuperPost.fields.Hello.type).equal('string');
-		should(SuperPost.fields.Foo).be.ok;
-		should(SuperPost.fields.Foo.type).be.ok;
-		should(SuperPost.fields.Foo.type).equal('number');
-	});
-
-	it("should be able to create instance", function(next) {
+	it('should be able to create instances', function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -120,44 +42,14 @@ describe("Connector", function() {
 
 	});
 
-	it("should be able to fetch schema with posts collection", function(next) {
-		connector.fetchSchema(function(err, schema) {
-			should(err).be.not.ok;
-			should(schema).be.an.Object;
-			should(schema.objects.Posts.schemaless).be.true;
+	it('should handle bad ids', function(next) {
+		Model.findOne('a_bad_id', function(err) {
+			should(err).be.ok;
 			next();
 		});
 	});
 
-	it('should be able to map fields', function(next) {
-
-		var Model = APIBuilder.Model.extend('account', {
-			fields: {
-				SuperName: { name: 'Name', type: String }
-			},
-			connector: 'appc.mongo'
-		});
-		var name = 'TEST: Hello world',
-			object = {
-				SuperName: name
-			};
-
-		Model.create(object, function(err, instance) {
-			should(err).be.not.ok;
-			should(instance).be.an.Object;
-			should(instance.SuperName).equal(name);
-			instance.set('SuperName', name + 'v2');
-			instance.save(function(err, result) {
-				Model.findAll(function(err, coll) {
-					should(coll[0].SuperName).equal(name + 'v2');
-					instance.delete(next);
-				});
-			});
-		});
-
-	});
-
-	it("should be able to find an instance by ID", function(next) {
+	it('should be able to find an instance by ID', function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -184,7 +76,7 @@ describe("Connector", function() {
 
 	});
 
-	it("should be able to find an instance by field value", function(next) {
+	it('should be able to find an instance by field value', function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -212,7 +104,7 @@ describe("Connector", function() {
 
 	});
 
-	it("should be able to query", function(callback) {
+	it('should be able to query', function(callback) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -246,7 +138,7 @@ describe("Connector", function() {
 
 	});
 
-	it("should be able to find all instances", function(next) {
+	it('should be able to find all instances', function(next) {
 
 		var posts = [
 			{
@@ -293,7 +185,7 @@ describe("Connector", function() {
 
 	});
 
-	it("should be able to update an instance", function(next) {
+	it('should be able to update an instance', function(next) {
 
 		var content = 'Hello world',
 			title = 'Test',
@@ -327,6 +219,34 @@ describe("Connector", function() {
 
 	});
 
+	it('should be able to map fields', function(next) {
+
+		var Model = APIBuilder.Model.extend('account', {
+				fields: {
+					SuperName: { name: 'Name', type: String }
+				},
+				connector: 'appc.mongo'
+			}),
+			name = 'TEST: Hello world',
+			object = {
+				SuperName: name
+			};
+
+		Model.create(object, function(err, instance) {
+			should(err).be.not.ok;
+			should(instance).be.an.Object;
+			should(instance.SuperName).equal(name);
+			instance.set('SuperName', name + 'v2');
+			instance.save(function(err, result) {
+				Model.findOne(instance.getPrimaryKey(), function(err, instance2) {
+					should(instance2.SuperName).equal(name + 'v2');
+					instance.delete(next);
+				});
+			});
+		});
+
+	});
+
 	var cities = [
 		{ city: 'Palo Alto' },
 		{ city: 'Lake Tahoe' },
@@ -337,8 +257,8 @@ describe("Connector", function() {
 		{ city: 'Paris' },
 		{ city: 'Rome' }
 	];
-	
-	it("API-371: should be able to query with $like", function(next) {
+
+	it('API-371: should be able to query with $like', function(next) {
 
 		var Model = APIBuilder.Model.extend('city', {
 			fields: { city: { type: String } },
@@ -361,7 +281,7 @@ describe("Connector", function() {
 
 	});
 
-	it("API-372: should order properly", function(next) {
+	it('API-372: should order properly and flexibly', function(next) {
 
 		var Model = APIBuilder.Model.extend('city', {
 			fields: { city: { type: String } },
