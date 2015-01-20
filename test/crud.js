@@ -119,20 +119,38 @@ describe('CRUD', function() {
 
 			var options = {
 				where: { content: { $like: 'Hello%' } },
-				sel: { _id: 1, content: 1 },
+				sel: { content: 1 },
 				order: { content: 1, title: -1 },
 				limit: 3,
 				skip: 0
 			};
 			Model.query(options, function(err, coll) {
 				should(err).be.not.ok;
-
-				async.eachSeries(coll, function(obj, next) {
-					should(obj.getPrimaryKey()).be.a.string;
-					should(obj.content).be.a.string;
+				for (var i = 0; i < coll.length; i++) {
+					var obj = coll[i];
+					should(obj.getPrimaryKey()).be.a.String;
+					should(obj.content).be.a.String;
 					should(obj.title).be.not.ok;
-					obj.remove(next);
-				}, callback);
+				}
+
+				var options = {
+					where: { content: { $like: 'Hello%' } },
+					unsel: { title: 1 },
+					order: { content: 1, title: -1 },
+					limit: 3,
+					skip: 0
+				};
+				Model.query(options, function(err, coll) {
+					should(err).be.not.ok;
+					for (var i = 0; i < coll.length; i++) {
+						var obj = coll[i];
+						should(obj.getPrimaryKey()).be.a.String;
+						should(obj.content).be.a.String;
+						should(obj.title).be.not.ok;
+					}
+					
+					Model.removeAll(callback);
+				});
 			});
 		});
 

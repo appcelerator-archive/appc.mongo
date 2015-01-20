@@ -1,11 +1,11 @@
 {
 	"name": "appc.mongo",
 	"description": "MongoDB connector",
-	"version": "1.0.17",
+	"version": "1.0.18",
 	"author": "Jeff Haynie",
 	"maintainers": [
 		"jhaynie <jhaynie@appcelerator.com>",
-		"subfuzion <tony@subfuzion.com>"
+		"Dawson Toth <dtoth@appcelerator.com>"
 	],
 	"license": "Apache2",
 	"framework": "none",

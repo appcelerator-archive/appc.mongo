@@ -10,9 +10,7 @@ module.exports = {
 	},
 	connectors: {
 		'appc.mongo': {
-			config: {
-				url: 'mongodb://localhost/apibuilder'
-			}
+			url: 'mongodb://localhost/apibuilder'
 		}
 	}
 };

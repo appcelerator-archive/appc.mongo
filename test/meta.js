@@ -1,5 +1,6 @@
 var should = require('should'),
 	common = require('./common'),
+	APIBuilder = common.APIBuilder,
 	server = common.server;
 
 describe('Lifecycle', function() {
@@ -21,6 +22,27 @@ describe('Lifecycle', function() {
 			should(schema).be.an.Object;
 			should(schema.objects.Posts.schemaless).be.true;
 			next();
+		});
+	});
+
+	it('should be able to handle bad connection strings', function(next) {
+		var Connector = require('../lib/index').create(APIBuilder, server),
+			connector = new Connector({ url: 'mongodb://0.0.0.0:65000' });
+		connector.connect(function(err) {
+			should(err).be.ok;
+			next();
+		});
+	});
+
+	it('should be able to disconnect multiple times', function(next) {
+		var Connector = require('../lib/index').create(APIBuilder, server),
+			connector = new Connector(server.config.connectors['appc.mongo'] || server.config);
+		connector.connect(function(err) {
+			should(err).be.not.ok;
+			connector.disconnect(function(err) {
+				should(err).be.not.ok;
+				connector.disconnect(next);
+			});
 		});
 	});
 
