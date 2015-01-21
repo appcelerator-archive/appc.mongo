@@ -156,6 +156,39 @@ describe('CRUD', function() {
 
 	});
 
+	it('should be able to $like', function(callback) {
+
+		async.eachSeries([
+			{ insert: 'Hello world', where: 'Hello%' },
+			{ insert: 'Hello world', where: '%world' },
+			{ insert: 'Hello world', where: '%Hello%' },
+			{ insert: '10% Off', where: '10%% %' },
+			{ insert: '10% Off', where: '10\\% %' },
+			{ insert: 'Hello world', where: 'Hello world' },
+			{ insert: 'Hello world', where: 'He%ld' },
+			{ insert: 'We use _.js', where: 'We % \\_._s' },
+			{ insert: 'We use _.js', where: 'We _s_ __._s' }
+		], function(item, next) {
+			Model.removeAll(function(err) {
+				if (err) {
+					return next(item.where + ' insert failed: ' + err);
+				}
+				Model.create({ title: item.insert }, function(err) {
+					if (err) {
+						return next(item.where + ' insert failed: ' + err);
+					}
+					Model.query({ where: { title: { $like: item.where } } }, function(err, coll) {
+						if (err || !coll || !coll.length) {
+							return next(item.where + ' lookup failed: ' + (err || 'none found'));
+						}
+						next();
+					});
+				});
+			});
+		}, callback);
+
+	});
+
 	it('should be able to find all instances', function(next) {
 
 		var posts = [
