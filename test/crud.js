@@ -166,8 +166,7 @@ describe('CRUD', function() {
 			{ insert: '10% Off', where: '10\\% %' },
 			{ insert: 'Hello world', where: 'Hello world' },
 			{ insert: 'Hello world', where: 'He%ld' },
-			{ insert: 'We use _.js', where: 'We % \\_._s' },
-			{ insert: 'We use _.js', where: 'We _s_ __._s' }
+			{ insert: 'We use _.js', where: 'We % \\_._s' }
 		], function(item, next) {
 			Model.removeAll(function(err) {
 				if (err) {
