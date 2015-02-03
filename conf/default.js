@@ -6,11 +6,11 @@ module.exports = {
 	requireSessionLogin: false,
 	admin: {
 		enabled: true,
-		prefix: '/apibuilder'
+		prefix: '/arrow'
 	},
 	connectors: {
 		'appc.mongo': {
-			url: 'mongodb://localhost/apibuilder'
+			url: 'mongodb://localhost/arrow'
 		}
 	}
 };

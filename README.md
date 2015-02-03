@@ -13,7 +13,7 @@ $ appc install connector/appc.mongo --save
 Now reference the connector in your model.
 
 ```javascript
-var User = APIBuilder.createModel('user',{
+var User = Arrow.createModel('user',{
 		fields: {
 				_id: { type: String, required: true, primary: true},
 				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
@@ -25,7 +25,7 @@ var User = APIBuilder.createModel('user',{
 If you want to map a specific model to a specific collection name, use metadata.  For example, to map the `user` model to the collection `users`, set it such as:
 
 ```javascript
-var User = APIBuilder.createModel('user',{
+var User = Arrow.createModel('user',{
 		fields: {
 				_id: { type: String, required: true, primary: true},
 				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }

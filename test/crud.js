@@ -1,13 +1,13 @@
 var should = require('should'),
 	common = require('./common'),
 	async = require('async'),
-	APIBuilder = common.APIBuilder,
+	Arrow = common.Arrow,
 	Model;
 
 describe('CRUD', function() {
 
 	before(function() {
-		Model = APIBuilder.Model.extend('post', {
+		Model = Arrow.Model.extend('post', {
 			fields: {
 				title: { type: String },
 				content: { type: String }
@@ -271,7 +271,7 @@ describe('CRUD', function() {
 
 	it('should be able to map fields', function(next) {
 
-		var Model = APIBuilder.Model.extend('account', {
+		var Model = Arrow.Model.extend('account', {
 				fields: {
 					SuperName: { name: 'Name', type: String }
 				},
@@ -310,7 +310,7 @@ describe('CRUD', function() {
 
 	it('API-371: should be able to query with $like', function(next) {
 
-		var Model = APIBuilder.Model.extend('city', {
+		var Model = Arrow.Model.extend('city', {
 			fields: { city: { type: String } },
 			connector: 'appc.mongo'
 		});
@@ -333,7 +333,7 @@ describe('CRUD', function() {
 
 	it('API-372: should order properly and flexibly', function(next) {
 
-		var Model = APIBuilder.Model.extend('city', {
+		var Model = Arrow.Model.extend('city', {
 			fields: { city: { type: String } },
 			connector: 'appc.mongo'
 		});

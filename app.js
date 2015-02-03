@@ -2,10 +2,10 @@
  * NOTE: This file is simply for testing this connector and will not
  * be used or packaged with the actual connector when published.
  */
-var APIBuilder = require('appcelerator').apibuilder,
-	server = new APIBuilder();
+var Arrow = require('appcelerator').arrow,
+	server = new Arrow();
 
-var User = APIBuilder.Model.extend('user', {
+var User = Arrow.Model.extend('user', {
 	fields: {
 		name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
 	},

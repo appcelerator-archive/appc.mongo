@@ -10,8 +10,8 @@
 	"license": "Apache2",
 	"framework": "none",
 	"keywords": [
-		"apibuilder",
-		"apibuilder-connector"
+		"arrow",
+		"arrow-connector"
 	],
 	"repository": {},
 	"scripts": {
@@ -34,6 +34,7 @@
 		"grunt-kahvesi": "^0.1.0",
 		"grunt-mocha-test": "^0.12.0",
 		"mocha": "^1.21.4",
+		"request": "^2.51.0",
 		"should": "^4.0.4"
 	},
 	"appcelerator": {}

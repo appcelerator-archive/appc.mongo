@@ -1,11 +1,11 @@
 var should = require('should'),
 	url = require('url'),
 	shortId = require('shortid'),
-	APIBuilder = require('appcelerator').apibuilder,
-	server = new APIBuilder(),
-	log = server && server.logger || APIBuilder.createLogger({}, { name: 'api-connector-mongo TEST' });
+	Arrow = require('appcelerator').arrow,
+	server = new Arrow(),
+	log = server && server.logger || Arrow.createLogger({}, { name: 'api-connector-mongo TEST' });
 
-exports.APIBuilder = APIBuilder;
+exports.Arrow = Arrow;
 exports.server = server;
 exports.log = log;
 

@@ -1,6 +1,6 @@
 var should = require('should'),
 	common = require('./common'),
-	APIBuilder = common.APIBuilder,
+	Arrow = common.Arrow,
 	server = common.server;
 
 describe('Lifecycle', function() {
@@ -26,7 +26,7 @@ describe('Lifecycle', function() {
 	});
 
 	it('should be able to handle bad connection strings', function(next) {
-		var Connector = require('../lib/index').create(APIBuilder, server),
+		var Connector = require('../lib/index').create(Arrow, server),
 			connector = new Connector({ url: 'mongodb://0.0.0.0:65000' });
 		connector.connect(function(err) {
 			should(err).be.ok;
@@ -35,7 +35,7 @@ describe('Lifecycle', function() {
 	});
 
 	it('should be able to disconnect multiple times', function(next) {
-		var Connector = require('../lib/index').create(APIBuilder, server),
+		var Connector = require('../lib/index').create(Arrow, server),
 			connector = new Connector(server.config.connectors['appc.mongo'] || server.config);
 		connector.connect(function(err) {
 			should(err).be.not.ok;
