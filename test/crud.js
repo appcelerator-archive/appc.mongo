@@ -235,6 +235,151 @@ describe('CRUD', function() {
 
 	});
 
+	it('should return a null record with findAnyModify with upsert=false', function(callback){
+		Model.create({
+			title: "My Title",
+			content: "My name is George."
+		}, function(err/*, result*/){
+			if(err){
+				return callback(err);
+			}
+
+			Model.findAndModify({
+				where: {
+					title: "Your Title"
+				}
+			}, {
+				title: "Our Title"
+			}, function(err, result){
+				if(err){
+					return callback(err);
+				}
+				true.should.eql(result === null);
+				callback();
+			});
+		});
+	});
+
+	it('should create a record with findAnyModify with upsert=true', function(callback){
+		Model.deleteAll(function() {
+			Model.create({
+				title: "My Title",
+				content: "My name is George."
+			}, function (err, createdRecord) {
+				if (err) {
+					return callback(err);
+				}
+
+				Model.findAndModify({
+					upsert: true,
+					where: {
+						title: "Your Title"
+					}
+				}, {
+					content: "Our Content",
+					title: "Our Title"
+				}, function (err/*, result*/) {
+					if (err) {
+						return callback(err);
+					}
+
+					Model.findOne({
+						content: "Our Content",
+						title: "Our Title"
+					}, function (err, result) {
+						if (err) {
+							return callback(err);
+						}
+
+						result.getPrimaryKey().should.not.eql(createdRecord.getPrimaryKey());
+
+						result.should.have.property('title');
+						result.title.should.eql('Our Title');
+
+						result.should.have.property('content');
+						result.content.should.eql('Our Content');
+
+						callback();
+					});
+				});
+			});
+		});
+	});
+
+	it('should update a record with findAnyModify returning the old document', function(callback){
+		Model.deleteAll(function() {
+			Model.create({
+				title: "My Title",
+				content: "My name is George."
+			}, function (err, createdRecord) {
+				if (err) {
+					return callback(err);
+				}
+
+				Model.findAndModify({
+					where: {
+						title: "My Title"
+					},
+					order: { title: -1, content: 1 },
+				}, {
+					title: "Our Title"
+				}, function (err, result) {
+					if (err) {
+						return callback(err);
+					}
+					false.should.eql(result === undefined);
+
+					result.should.have.property('title');
+					result.should.have.property('content');
+
+					result.getPrimaryKey().should.eql(createdRecord.getPrimaryKey());
+					result.title.should.eql(createdRecord.title);
+					result.content.should.eql(createdRecord.content);
+
+					callback();
+				});
+			});
+		});
+	});
+
+	it('should update a record with findAnyModify returning the new document', function(callback){
+		Model.deleteAll(function() {
+			Model.create({
+				title: "My Title",
+				content: "My name is George."
+			}, function (err, createdRecord) {
+				if (err) {
+					return callback(err);
+				}
+
+				Model.findAndModify({
+					new: true,
+					where: {
+						title: "My Title"
+					}
+				}, {
+					$set:{
+						title: "Our Title"
+					}
+				}, function (err, result) {
+					if (err) {
+						return callback(err);
+					}
+					false.should.eql(result === undefined);
+
+					result.should.have.property('title');
+					result.should.have.property('content');
+
+					result.getPrimaryKey().should.eql(createdRecord.getPrimaryKey());
+					result.title.should.eql('Our Title');
+					result.content.should.eql(createdRecord.content);
+
+					callback();
+				});
+			});
+		});
+	});
+
 	it('should be able to retrieve distinct values', function(next) {
 
 		var content = 'Hello world',
@@ -244,39 +389,42 @@ describe('CRUD', function() {
 				title: title
 			};
 
-		Model.create(object, function(err, instance) {
-			should(err).be.not.ok;
-			should(instance).be.an.Object;
-
-			object.content = "Aloha world";
-			Model.create(object, function(err, instance) {
+		Model.deleteAll(function() {
+			Model.create(object, function (err, instance) {
 				should(err).be.not.ok;
 				should(instance).be.an.Object;
 
-				object.title = 'Test-2';
-				Model.create(object, function(err, instance) {
+				object.content = "Aloha world";
+				Model.create(object, function (err, instance) {
 					should(err).be.not.ok;
 					should(instance).be.an.Object;
 
-					Model.distinct('title', {}, function(err, values) {
+					object.title = 'Test-2';
+					Model.create(object, function (err, instance) {
 						should(err).be.not.ok;
+						should(instance).be.an.Object;
 
-						should(values).be.an.Array.with.length(2);
-						should(values).containEql(title);
-						should(values).containEql(object.title);
-
-						Model.distinct('title', {
-							where: {
-								content: "Hello world"
-							}
-						}, function(err, values) {
+						Model.distinct('title', {}, function (err, values) {
 							should(err).be.not.ok;
 
-							should(values).be.an.Array.with.length(1);
+							should(values).be.an.Array.with.length(2);
 							should(values).containEql(title);
+							should(values).containEql(object.title);
 
-							next();
+							Model.distinct('title', {
+								where: {
+									content: "Hello world"
+								}
+							}, function (err, values) {
+								should(err).be.not.ok;
+
+								should(values).be.an.Array.with.length(1);
+								should(values).containEql(title);
+
+								next();
+							});
 						});
+
 					});
 
 				});
