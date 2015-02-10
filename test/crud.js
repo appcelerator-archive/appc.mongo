@@ -271,13 +271,14 @@ describe('CRUD', function() {
 				}
 
 				Model.findAndModify({
-					upsert: true,
 					where: {
 						title: "Your Title"
 					}
 				}, {
 					content: "Our Content",
 					title: "Our Title"
+				}, {
+					upsert: true
 				}, function (err/*, result*/) {
 					if (err) {
 						return callback(err);
@@ -353,7 +354,6 @@ describe('CRUD', function() {
 				}
 
 				Model.findAndModify({
-					new: true,
 					where: {
 						title: "My Title"
 					}
@@ -361,6 +361,8 @@ describe('CRUD', function() {
 					$set:{
 						title: "Our Title"
 					}
+				}, {
+					new: true
 				}, function (err, result) {
 					if (err) {
 						return callback(err);
