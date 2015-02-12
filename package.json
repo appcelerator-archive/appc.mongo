@@ -13,9 +13,14 @@
 		"arrow",
 		"arrow-connector",
 		"appcelerator",
-		"appc-package-connector"
+		"appc-package-connector",
+		"mongo",
+		"mongodb"
 	],
-	"repository": {},
+	"repository": {
+		"type":"git",
+		"url":"git@github.com:appcelerator/appc.mongo.git"
+	},
 	"scripts": {
 		"test": "grunt",
 		"start": "node ./app.js"
