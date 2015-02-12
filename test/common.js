@@ -1,9 +1,9 @@
 var should = require('should'),
 	url = require('url'),
 	shortId = require('shortid'),
-	Arrow = require('appcelerator').arrow,
+	Arrow = require('arrow.js'),
 	server = new Arrow(),
-	log = server && server.logger || Arrow.createLogger({}, { name: 'api-connector-mongo TEST' });
+	log = server && server.logger || Arrow.createLogger({}, { name: 'mongo TEST' });
 
 exports.Arrow = Arrow;
 exports.server = server;

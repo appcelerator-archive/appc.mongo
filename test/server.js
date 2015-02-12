@@ -30,7 +30,7 @@ describe('Server', function() {
 		});
 	});
 
-	it('API-237: should return 204 when GET/Querying without results', function(next) {
+	it('API-237: should return 404 when GET/Querying without results', function(next) {
 		request({
 			method: 'GET',
 			uri: 'http://localhost:' + server.port + '/appc.mongo/super_post/query',
@@ -44,8 +44,12 @@ describe('Server', function() {
 			}
 		}, function(err, response, body) {
 			assert.ifError(err);
-			should(response.statusCode).equal(204);
-			should(body).be.not.ok;
+			should(response.statusCode).equal(404);
+			should(body).be.ok;
+			body = JSON.parse(body);
+			should(body).have.property('success',false);
+			should(body).have.property('code',404);
+			should(body).have.property('message',"Not Found");
 			next();
 		});
 	});
