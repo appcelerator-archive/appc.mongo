@@ -3,7 +3,7 @@ var should = require('should'),
 	shortId = require('shortid'),
 	Arrow = require('arrow.js'),
 	server = new Arrow(),
-	log = server && server.logger || Arrow.createLogger({}, { name: 'api-connector-mongo TEST' });
+	log = server && server.logger || Arrow.createLogger({}, { name: 'appc.mongo TEST' });
 
 exports.Arrow = Arrow;
 exports.server = server;

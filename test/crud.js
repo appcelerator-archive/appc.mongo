@@ -321,7 +321,7 @@ describe('CRUD', function() {
 					where: {
 						title: "My Title"
 					},
-					order: { title: -1, content: 1 },
+					order: { title: -1, content: 1 }
 				}, {
 					title: "Our Title"
 				}, function (err, result) {
