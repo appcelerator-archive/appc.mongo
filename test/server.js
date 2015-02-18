@@ -14,7 +14,7 @@ describe('Server', function() {
 	it('API-237: should return 201 when POST/Creating a record', function(next) {
 		request({
 			method: 'POST',
-			uri: 'http://localhost:' + server.port + '/appc.mongo/super_post',
+			uri: 'http://localhost:' + server.port + '/api/appc.mongo/super_post',
 			auth: auth,
 			data: {
 				Hello: 'you! ' + Date.now(),
@@ -33,7 +33,7 @@ describe('Server', function() {
 	it('API-237: should return 404 when GET/Querying without results', function(next) {
 		request({
 			method: 'GET',
-			uri: 'http://localhost:' + server.port + '/appc.mongo/super_post/query',
+			uri: 'http://localhost:' + server.port + '/api/appc.mongo/super_post/query',
 			auth: auth,
 			qs: {
 				where: {
