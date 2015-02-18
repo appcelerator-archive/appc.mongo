@@ -1,9 +1,9 @@
 var should = require('should'),
 	url = require('url'),
 	shortId = require('shortid'),
-	Arrow = require('arrow.js'),
+	Arrow = require('arrow'),
 	server = new Arrow(),
-	log = server && server.logger || Arrow.createLogger({}, { name: 'appc.mongo TEST' });
+	log = server && server.logger || Arrow.createLogger({}, { name: 'mongo TEST' });
 
 exports.Arrow = Arrow;
 exports.server = server;
