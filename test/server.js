@@ -16,9 +16,9 @@ describe('Server', function() {
 			method: 'POST',
 			uri: 'http://localhost:' + server.port + '/api/appc.mongo/super_post',
 			auth: auth,
-			data: {
+			body: {
 				Hello: 'you! ' + Date.now(),
-				Foo: 'Bar we drink in moderation, yes?'
+				Foo: 2
 			},
 			json: true
 		}, function(err, response, body) {
@@ -50,6 +50,18 @@ describe('Server', function() {
 			should(body).have.property('success',false);
 			should(body).have.property('code',404);
 			should(body).have.property('message',"Not Found");
+			next();
+		});
+	});
+
+	it('API-374: should not return 404 when deleting all', function(next) {
+		request({
+			method: 'DELETE',
+			uri: 'http://localhost:' + server.port + '/api/appc.mongo/super_post',
+			auth: auth
+		}, function(err, response, body) {
+			assert.ifError(err);
+			should(response.statusCode).equal(204);
 			next();
 		});
 	});
