@@ -45,5 +45,10 @@
 		"should": "^4.0.4"
 	},
 	"appcelerator": {},
-	"appc_access": "public"
+	"appc_access": "public",
+	"appc_owners": [
+		"jhaynie@appcelerator.com",
+		"dtoth@appcelerator.com",
+		"tlukasavage@appcelerator.com"
+	]
 }
