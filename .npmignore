@@ -6,3 +6,5 @@ logs
 test
 appc.json
 Gruntfile.js
+conf/local.js
+app.js
