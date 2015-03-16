@@ -553,4 +553,24 @@ describe('CRUD', function() {
 
 	});
 
+	it('should strip off connector name in model name', function(next) {
+
+		var Model = Arrow.Model.extend('appc.mongo/city', {
+			fields: { city: { type: String } },
+			connector: 'appc.mongo'
+		});
+		Model.create(cities, function(err) {
+			should(err).be.not.ok;
+
+			Model.query({ order: { city: '-1' } }, function(err, coll) {
+				should(err).be.not.ok;
+				should(coll[0].city).equal('Rome');
+				should(coll[cities.length - 1].city).equal('Chicago');
+				Model.deleteAll(next);
+			});
+
+		});
+
+	});
+
 });
