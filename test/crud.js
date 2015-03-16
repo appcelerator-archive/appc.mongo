@@ -573,4 +573,12 @@ describe('CRUD', function() {
 
 	});
 
+	it('should have name and version on base connector', function() {
+		var Connector = require('../');
+		should(Connector).be.an.object;
+		should(Connector).have.property('name','appc.mongo');
+		var pkg = require('../package.json');
+		should(Connector).have.property('version',pkg.version);
+	});
+
 });
