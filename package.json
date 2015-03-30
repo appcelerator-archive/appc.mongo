@@ -1,7 +1,7 @@
 {
   "name": "appc.mongo",
   "description": "MongoDB connector",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "author": "Jeff Haynie",
   "maintainers": [
     "Jeff Haynie <jhaynie@appcelerator.com>",
@@ -22,7 +22,8 @@
   },
   "scripts": {
     "test": "grunt",
-    "start": "node ./app.js"
+    "start": "node ./app.js",
+    "preinstall": "node ./bin/update"
   },
   "private": true,
   "dependencies": {
@@ -42,5 +43,6 @@
     "mocha": "^1.21.4",
     "request": "^2.51.0",
     "should": "^4.0.4"
-  }
+  },
+  "ensureLatest": [ "arrow" ]
 }
