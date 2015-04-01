@@ -1,7 +1,7 @@
 {
   "name": "appc.mongo",
   "description": "MongoDB connector",
-  "version": "1.0.34",
+  "version": "1.0.35",
   "author": "Jeff Haynie",
   "maintainers": [
     "Jeff Haynie <jhaynie@appcelerator.com>",
@@ -34,7 +34,7 @@
     "shortid": "^2.0.1"
   },
   "devDependencies": {
-    "arrow": "0.3.148",
+    "arrow": "0.3.158",
     "ensure-latest": "^1.0.3",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
