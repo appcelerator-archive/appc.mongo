@@ -10,7 +10,9 @@ module.exports = {
 	},
 	connectors: {
 		'appc.mongo': {
-			url: 'mongodb://localhost/arrow'
+			url: 'mongodb://localhost/arrow',
+			generateModelsFromSchema: true,
+			modelAutogen: true
 		}
 	}
 };
