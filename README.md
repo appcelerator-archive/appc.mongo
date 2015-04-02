@@ -2,42 +2,57 @@
 
 This is an Arrow connector to MongoDB.
 
-> This software is pre-release and not yet ready for usage.  Please don't use this just yet while we're working through testing and finishing it up. Once it's ready, we'll make an announcement about it.
-
-To install:
+## Installation
 
 ```bash
 $ appc install connector/appc.mongo --save
 ```
 
-Now reference the connector in your model.
+## Usage
+
+Reference the connector in your model.
 
 ```javascript
-var User = Arrow.createModel('user',{
-		fields: {
-				_id: { type: String, required: true, primary: true},
-				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
-		},
-		connector: 'appc.mongo'
+var User = Arrow.Model.extend('user', {
+	fields: {
+		name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
+	},
+	connector: 'appc.mongo'
 });
 ```
 
 If you want to map a specific model to a specific collection name, use metadata.  For example, to map the `user` model to the collection `users`, set it such as:
 
 ```javascript
-var User = Arrow.createModel('user',{
-		fields: {
-				_id: { type: String, required: true, primary: true},
-				name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
-		},
-		connector: 'appc.mongo',
-		metadata: {
-				'appc.mongo': {
-						collection: 'users'
-				}
+var User = Arrow.Model.extend('user', {
+	fields: {
+		name: { type: String, required: false, validator: /[a-zA-Z]{3,}/ }
+	},
+	connector: 'appc.mongo',
+	metadata: {
+		'appc.mongo': {
+			collection: 'users'
 		}
+	}
 });
 ```
+
+## Development
+
+> This section is for individuals developing the Mongo Connector and not intended
+  for end-users.
+
+```bash
+npm install
+node app.js
+```
+
+### Running Unit Tests
+
+```bash
+npm test
+```
+
 
 # Contributing
 
