@@ -1,7 +1,7 @@
 {
   "name": "appc.mongo",
   "description": "MongoDB connector",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "author": "Jeff Haynie",
   "maintainers": [
     "Jeff Haynie <jhaynie@appcelerator.com>",
