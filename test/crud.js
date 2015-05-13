@@ -284,9 +284,12 @@ describe('CRUD', function() {
 						return callback(err);
 					}
 
-					Model.findOne({
-						content: "Our Content",
-						title: "Our Title"
+					Model.query({
+						where: {
+							content: "Our Content",
+							title: "Our Title"
+						},
+						limit: 1
 					}, function (err, result) {
 						if (err) {
 							return callback(err);
