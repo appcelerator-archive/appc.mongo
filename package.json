@@ -34,12 +34,12 @@
     "shortid": "^2.0.1"
   },
   "devDependencies": {
-    "arrow": "0.3.208",
+    "arrow": "0.4.9",
     "ensure-latest": "^1.0.3",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-jshint": "^0.10.0",
-    "grunt-kahvesi": "^0.1.0",
+    "grunt-kahvesi": "git+ssh://git@github.com:dawsontoth/grunt-kahvesi.git",
     "grunt-mocha-test": "^0.12.0",
     "mocha": "^1.21.4",
     "request": "^2.55.0",

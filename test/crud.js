@@ -677,4 +677,35 @@ describe('CRUD', function () {
 		should(Connector).have.property('version', pkg.version);
 	});
 
+	it('API-864: should support ObjectID fields', function (next) {
+
+		var Model = Arrow.Model.extend('city', {
+			fields: {
+				city: {type: String},
+				state_id: {type: ObjectID}
+			},
+			connector: 'appc.mongo'
+		});
+		var id = new ObjectID();
+		Model.create({
+			city: 'Elkton',
+			state_id: id
+		}, function (err, instance) {
+			should(err).be.not.ok;
+			console.log('instance.state_id:');
+			console.log(instance.state_id instanceof ObjectID);
+
+			Model.query({where: {city: 'Elkton'}}, function (err, coll) {
+				should(err).be.not.ok;
+				should(coll[0].city).equal('Elkton');
+				console.log('state_id:');
+				should(coll[0].state_id).be.ok;
+				console.log(coll[0].state_id);
+				Model.deleteAll(next);
+			});
+
+		});
+
+	});
+
 });
