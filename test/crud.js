@@ -670,7 +670,8 @@ describe('CRUD', function () {
 	});
 
 	it('should have name and version on base connector', function () {
-		var Connector = require('../');
+		var server = new Arrow({}, true);
+		var Connector = server.getConnector('appc.mongo');
 		should(Connector).be.an.object;
 		should(Connector).have.property('name', 'appc.mongo');
 		var pkg = require('../package.json');

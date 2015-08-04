@@ -25,27 +25,6 @@ describe('Lifecycle', function() {
 		});
 	});
 
-	it('should be able to handle bad connection strings', function(next) {
-		var Connector = require('../lib/index').create(Arrow, server),
-			connector = new Connector({ url: 'mongodb://0.0.0.0:65000' });
-		connector.connect(function(err) {
-			should(err).be.ok;
-			next();
-		});
-	});
-
-	it('should be able to disconnect multiple times', function(next) {
-		var Connector = require('../lib/index').create(Arrow, server),
-			connector = new Connector(server.config.connectors['appc.mongo'] || server.config);
-		connector.connect(function(err) {
-			should(err).be.not.ok;
-			connector.disconnect(function(err) {
-				should(err).be.not.ok;
-				connector.disconnect(next);
-			});
-		});
-	});
-
 	it('API-320: should create models from tables', function() {
 		var SuperPost = connector.getModel('appc.mongo/super_post');
 		should(SuperPost).be.ok;
