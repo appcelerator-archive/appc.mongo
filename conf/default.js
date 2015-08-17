@@ -8,6 +8,10 @@ module.exports = {
 		enabled: true,
 		prefix: '/arrow'
 	},
+	logging: {
+		logdir: './logs',
+		transactionLogEnabled: true
+	},
 	connectors: {
 		'appc.mongo': {
 			url: 'mongodb://localhost/arrow',
