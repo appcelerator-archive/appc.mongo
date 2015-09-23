@@ -651,9 +651,14 @@ describe('CRUD', function () {
 
 	it('should strip off connector name in model name', function (next) {
 
-		var Model = Arrow.Model.extend('appc.mongo/city', {
+		var Model = Arrow.Model.extend('appc.mongo/super_city', {
 			fields: {city: {type: String}},
-			connector: 'appc.mongo'
+			connector: 'appc.mongo',
+			metadata: {
+				'appc.mongo': {
+					collection: 'city'
+				}
+			}
 		});
 		Model.create(cities, function (err) {
 			should(err).be.not.ok;

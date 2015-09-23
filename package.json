@@ -1,7 +1,7 @@
 {
 	"name": "appc.mongo",
 	"description": "MongoDB connector",
-	"version": "1.1.1",
+	"version": "1.1.2",
 	"author": "Jeff Haynie",
 	"maintainers": [
 		"Jeff Haynie <jhaynie@appcelerator.com>",
@@ -18,7 +18,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git@github.com:appcelerator/appc.mongo.git"
+		"url": "https://github.com/appcelerator/appc.mongo"
 	},
 	"scripts": {
 		"start": "appc run",
@@ -27,8 +27,9 @@
 	"private": true,
 	"dependencies": {
 		"async": "^0.9.0",
-		"lodash": "^2.4.1",
+		"lodash": "^3.10.1",
 		"mongodb": "^1.4.9",
+		"semver": "^5.0.3",
 		"shortid": "^2.0.1"
 	},
 	"devDependencies": {
