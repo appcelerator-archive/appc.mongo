@@ -1,14 +1,15 @@
 {
-  "type": "connector",
-  "group": "arrow",
-  "access": "public",
-  "dependencies": {},
-  "owners": [
-    "jhaynie@appcelerator.com",
-    "dtoth@appcelerator.com",
-    "mgoff@appcelerator.com"
-  ],
-  "assets": {
-      "small_logo":"docs/registry-mongodb.png"
-  }
+	"type": "connector",
+	"group": "arrow",
+	"access": "public",
+	"dependencies": {},
+	"owners": [
+		"jhaynie@appcelerator.com",
+		"hudson@appcelerator.com",
+		"dtoth@appcelerator.com",
+		"mgoff@appcelerator.com"
+	],
+	"assets": {
+		"small_logo": "docs/registry-mongodb.png"
+	}
 }
