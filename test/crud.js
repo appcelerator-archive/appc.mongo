@@ -128,7 +128,7 @@ describe('CRUD', function () {
 			goodInstance.setPrimaryKey('bad');
 			goodInstance.delete(function (err, badInstance) {
 				should(err).be.ok;
-				should(err.message).equal('unexpected value for deleteOne: bad');
+				should(err.message).equal('Invalid primary key for Delete One: bad');
 				should(badInstance).be.not.ok;
 				goodInstance.setPrimaryKey(savedID.split('').reverse().join(''));
 				goodInstance.delete(function (err, badInstance) {
@@ -312,7 +312,7 @@ describe('CRUD', function () {
 					var array = [];
 
 					coll2.forEach(function (post, i) {
-						should(post.getPrimaryKey()).equal(keys[i]);
+						should(keys).containEql(post.getPrimaryKey());
 						array.push(post);
 					});
 
