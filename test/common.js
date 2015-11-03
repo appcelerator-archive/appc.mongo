@@ -7,6 +7,7 @@ var path = require('path'),
 // Create a test collection.
 var config = new (Arrow.Loader)(path.resolve(__dirname + '/../')),
 	mongoURL = config.connectors['appc.mongo'].url;
+
 MongoClient.connect(mongoURL, function didConnect(err, db) {
 	if (err) {
 		return console.error(err);
@@ -27,6 +28,7 @@ MongoClient.connect(mongoURL, function didConnect(err, db) {
 });
 
 var server = new Arrow();
+exports.mongoURL = mongoURL;
 exports.Arrow = Arrow;
 exports.server = server;
 exports.connector = server.getConnector('appc.mongo');

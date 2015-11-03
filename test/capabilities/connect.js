@@ -1,6 +1,8 @@
+var common = require('../common');
+
 exports.connect = {
 	goodConfig: {
-		url: 'mongodb://localhost/arrow'
+		url: common.mongoURL
 	},
 	badConfig: {
 		url: 'mongodb://255.255.255.255/arrow'
