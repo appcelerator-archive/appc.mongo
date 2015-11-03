@@ -3,6 +3,7 @@ var should = require('should'),
 	async = require('async'),
 	MongoDB = require('mongodb'),
 	ObjectID = MongoDB.ObjectID,
+	connector = common.connector,
 	Arrow = common.Arrow,
 	Model;
 
@@ -330,75 +331,85 @@ describe('CRUD', function () {
 
 	it('should return a null record with findAnyModify with upsert=false', function (callback) {
 		Model.create({
-			title: "My Title",
-			content: "My name is George."
+			title: 'My Title',
+			content: 'My name is George.'
 		}, function (err/*, result*/) {
 			if (err) {
 				return callback(err);
 			}
 
-			Model.findAndModify({
-				where: {
-					title: "Your Title"
-				}
-			}, {
-				title: "Our Title"
-			}, function (err, result) {
-				if (err) {
-					return callback(err);
-				}
-				true.should.eql(result === null);
-				callback();
-			});
+			Model.findAndModify(
+				{
+					where: {
+						title: 'Your Title'
+					}
+				},
+				{
+					title: 'Our Title'
+				},
+				{
+					upsert: false
+				},
+				function (err, result) {
+					if (err) {
+						return callback(err);
+					}
+					should.equal(result, null);
+					callback();
+				});
 		});
 	});
 
 	it('should create a record with findAnyModify with upsert=true', function (callback) {
 		Model.deleteAll(function () {
 			Model.create({
-				title: "My Title",
-				content: "My name is George."
+				title: 'My Title',
+				content: 'My name is George.'
 			}, function (err, createdRecord) {
 				if (err) {
 					return callback(err);
 				}
 
-				Model.findAndModify({
-					where: {
-						title: "Your Title"
-					}
-				}, {
-					content: "Our Content",
-					title: "Our Title"
-				}, {
-					upsert: true
-				}, function (err/*, result*/) {
-					if (err) {
-						return callback(err);
-					}
-
-					Model.query({
+				Model.findAndModify(
+					{
 						where: {
-							content: "Our Content",
-							title: "Our Title"
-						},
-						limit: 1
-					}, function (err, result) {
+							title: 'Your Title'
+						}
+					},
+					{
+						content: 'Our Content',
+						title: 'Our Title'
+					},
+					{
+						upsert: true
+					},
+					function (err/*, result*/) {
 						if (err) {
 							return callback(err);
 						}
 
-						result.getPrimaryKey().should.not.eql(createdRecord.getPrimaryKey());
+						Model.query({
+							where: {
+								content: 'Our Content',
+								title: 'Our Title'
+							},
+							limit: 1
+						}, function (err, result) {
+							if (err) {
+								return callback(err);
+							}
 
-						result.should.have.property('title');
-						result.title.should.eql('Our Title');
+							result.getPrimaryKey().should.not.eql(createdRecord.getPrimaryKey());
 
-						result.should.have.property('content');
-						result.content.should.eql('Our Content');
+							result.should.have.property('title');
+							result.title.should.eql('Our Title');
 
-						callback();
+							result.should.have.property('content');
+							result.content.should.eql('Our Content');
+
+							callback();
+						});
 					});
-				});
 			});
 		});
 	});
@@ -406,8 +417,8 @@ describe('CRUD', function () {
 	it('should update a record with findAnyModify returning the old document', function (callback) {
 		Model.deleteAll(function () {
 			Model.create({
-				title: "My Title",
-				content: "My name is George."
+				title: 'My Title',
+				content: 'My name is George.'
 			}, function (err, createdRecord) {
 				if (err) {
 					return callback(err);
@@ -415,11 +426,11 @@ describe('CRUD', function () {
 
 				Model.findAndModify({
 					where: {
-						title: "My Title"
+						title: 'My Title'
 					},
 					order: {title: -1, content: 1}
 				}, {
-					title: "Our Title"
+					title: 'Our Title'
 				}, function (err, result) {
 					if (err) {
 						return callback(err);
@@ -442,8 +453,8 @@ describe('CRUD', function () {
 	it('should update a record with findAnyModify returning the new document', function (callback) {
 		Model.deleteAll(function () {
 			Model.create({
-				title: "My Title",
-				content: "My name is George."
+				title: 'My Title',
+				content: 'My name is George.'
 			}, function (err, createdRecord) {
 				if (err) {
 					return callback(err);
@@ -451,11 +462,11 @@ describe('CRUD', function () {
 
 				Model.findAndModify({
 					where: {
-						title: "My Title"
+						title: 'My Title'
 					}
 				}, {
 					$set: {
-						title: "Our Title"
+						title: 'Our Title'
 					}
 				}, {
 					new: true
@@ -492,7 +503,7 @@ describe('CRUD', function () {
 				should(err).be.not.ok;
 				should(instance).be.an.Object;
 
-				object.content = "Aloha world";
+				object.content = 'Aloha world';
 				Model.create(object, function (err, instance) {
 					should(err).be.not.ok;
 					should(instance).be.an.Object;
@@ -511,7 +522,7 @@ describe('CRUD', function () {
 
 							Model.distinct('title', {
 								where: {
-									content: "Hello world"
+									content: 'Hello world'
 								}
 							}, function (err, values) {
 								should(err).be.not.ok;

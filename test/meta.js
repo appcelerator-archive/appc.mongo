@@ -1,14 +1,11 @@
 var should = require('should'),
 	common = require('./common'),
-	Arrow = common.Arrow,
-	server = common.server;
+	connector = common.connector;
 
-describe('Lifecycle', function() {
+describe('Lifecycle', function () {
 
-	var connector = server.getConnector('appc.mongo');
-
-	it('should be able to fetch metadata', function(next) {
-		connector.fetchMetadata(function(err, meta) {
+	it('should be able to fetch metadata', function (next) {
+		connector.fetchMetadata(function (err, meta) {
 			should(err).be.not.ok;
 			should(meta).be.an.Object;
 			should(Object.keys(meta)).containEql('fields');
@@ -16,17 +13,16 @@ describe('Lifecycle', function() {
 		});
 	});
 
-	it('should be able to fetch schema', function(next) {
-		connector.fetchSchema(function(err, schema) {
+	it('should be able to fetch schema', function (next) {
+		connector.fetchSchema(function (err, schema) {
 			should(err).be.not.ok;
 			should(schema).be.an.Object;
-			should(schema.objects.Posts.schemaless).be.true;
 			next();
 		});
 	});
 
-	it('API-320: should create models from tables', function() {
-		var SuperPost = connector.getModel('appc.mongo/super_post');
+	it('API-320: should create models from tables', function () {
+		var SuperPost = connector.getModel('super_post');
 		should(SuperPost).be.ok;
 		should(SuperPost.fields).be.ok;
 		should(Object.keys(SuperPost.fields).length).equal(2);
