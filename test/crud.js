@@ -623,20 +623,52 @@ describe('CRUD', function () {
 			fields: {city: {type: String}},
 			connector: 'appc.mongo'
 		});
-		Model.create(cities, function (err) {
-			should(err).be.not.ok;
+		async.series([
+			Model.deleteAll.bind(Model),
+			Model.create.bind(Model, cities),
+			function (next) {
+				Model.query({
+					where: {city: {$like: '%o'}},
+					page: 2, per_page: 2
+				}, function (err, coll) {
+					should(err).be.not.ok;
+					should(coll.length).equal(1);
+					should(coll[0].city).equal('Fresno');
+					next();
+				});
+			},
+			Model.deleteAll.bind(Model)
+		], next);
 
-			Model.query({
-				where: {city: {$like: '%o'}},
-				page: 2, per_page: 2
-			}, function (err, coll) {
-				should(err).be.not.ok;
-				should(coll.length).equal(1);
-				should(coll[0].city).equal('Fresno');
-				Model.deleteAll(next);
-			});
+	});
 
+	it('should be able to count', function (next) {
+
+		var Model = Arrow.Model.extend('city', {
+			fields: {city: {type: String}},
+			connector: 'appc.mongo'
 		});
+		async.series([
+			Model.deleteAll.bind(Model),
+			Model.create.bind(Model, cities),
+			function (next) {
+				Model.count(function (err, count) {
+					should(err).be.not.ok;
+					should(count).be.equal(cities.length);
+					next();
+				});
+			},
+			function (next) {
+				Model.count({
+					where: {city: 'Fresno'}
+				}, function (err, count) {
+					should(err).be.not.ok;
+					should(count).be.equal(1);
+					next();
+				});
+			},
+			Model.deleteAll.bind(Model)
+		], next);
 
 	});
 
