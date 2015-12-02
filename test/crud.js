@@ -74,9 +74,9 @@ describe('CRUD', function () {
 	});
 
 	it('should handle bad ids', function (next) {
-		Model.findOne('a_bad_id', function (err) {
+		Model.findByID('a_bad_id', function (err) {
 			should(err).be.ok;
-			Model.findOne(new ObjectID(), function (err, instance) {
+			Model.findByID(new ObjectID(), function (err, instance) {
 				should(err).be.not.ok;
 				should(instance).be.not.ok;
 				next();
@@ -597,7 +597,7 @@ describe('CRUD', function () {
 			should(instance.SuperName).equal(name);
 			instance.set('SuperName', name + 'v2');
 			instance.save(function (err, result) {
-				Model.findOne(instance.getPrimaryKey(), function (err, instance2) {
+				Model.findByID(instance.getPrimaryKey(), function (err, instance2) {
 					should(instance2.SuperName).equal(name + 'v2');
 					instance.delete(next);
 				});
