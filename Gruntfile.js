@@ -18,7 +18,10 @@ module.exports = function(grunt) {
 			src: ['lib/**/*.js', 'test/**/*.js']
 		},
 		kahvesi: {
-			src: ['test/**/*.js']
+			src: ['test/**/*.js'],
+			options: {
+				verbose: true
+			}
 		},
 		clean: ['tmp']
 	});
