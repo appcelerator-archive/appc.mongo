@@ -6,6 +6,7 @@ module.exports = function (grunt) {
 			coverage: {
 				src: 'test',
 				options: {
+					timeout: 30000,
 					check: {
 						statements: 90,
 						branches: 90,
