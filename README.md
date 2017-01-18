@@ -5,7 +5,7 @@ This is an Arrow connector to MongoDB.
 ## Installation
 
 ```bash
-$ appc install connector/appc.mongo --save
+$ appc install connector/appc.mongo
 ```
 
 ## Usage
