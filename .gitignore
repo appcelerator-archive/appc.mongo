@@ -1,6 +1,5 @@
 node_modules
 logs
-coverage
 *.tgz
 conf/local.js
 *.log
