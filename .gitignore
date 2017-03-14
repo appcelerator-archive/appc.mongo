@@ -5,3 +5,4 @@ coverage
 conf/local.js
 *.log
 .idea
+coverage

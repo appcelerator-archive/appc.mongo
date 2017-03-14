@@ -1,70 +1,112 @@
-var assert = require('assert'),
-	should = require('should'),
-	request = require('request'),
-	common = require('./common'),
-	server = common.server;
+'use strict'
 
-describe('Server', function () {
+const Arrow = require('arrow')
+const connector = require('../lib')
+const schema = require('../lib/schema/fetchSchema')
+const path = require('path')
+const mockery = require('mockery')
 
-	var auth = {
-			user: server.config.apikey,
-			password: ''
-		},
-		base = 'http://127.0.0.1:' + server.port + '/api';
+// Init mockery
+mockery.enable({
+  warnOnReplace: false,
+  warnOnUnregistered: false
+})
 
-	it('API-237: should return 201 when POST/Creating a record', function (next) {
-		request({
-			method: 'POST',
-			uri: base + '/appc.mongo/super_post',
-			auth: auth,
-			body: {
-				Hello: 'you! ' + Date.now(),
-				Foo: 2
-			},
-			json: true
-		}, function (err, response, body) {
-			assert.ifError(err);
-			should(response.statusCode).equal(201);
-			should(response.headers.location).be.ok;
-			should(body).be.not.ok;
-			next();
-		});
-	});
+module.exports = function (options) {
+  return new Promise((resolve, reject) => {
+    options = options || {}
+    // Arrow instance
+    const server = new Arrow()
+    // If options.startServer is set to false arrow won't start
+    // real http server and won't load connectors and stuff
+    if (options.startServer === false) {
+      resolve(server)
+    } else {
+      var fetchSchema
 
-	it('API-237: should return 404 when GET/Querying without results', function (next) {
-		request({
-			method: 'GET',
-			uri: base + '/appc.mongo/super_post/query',
-			auth: auth,
-			qs: {
-				where: {
-					Hello: 'some invalid value for the field that exists no where'
-				},
-				skip: 10000,
-				limit: 1
-			}
-		}, function (err, response, body) {
-			assert.ifError(err);
-			should(response.statusCode).equal(404);
-			should(body).be.ok;
-			body = JSON.parse(body);
-			should(body).have.property('success', false);
-			should(body).have.property('code', 404);
-			should(body).have.property('message', "Not Found");
-			next();
-		});
-	});
+      // If options.connectService is set to true, the server will
+      // try to connect with the odata source
+      // If it's set to false the connector will be started
+      // with NO ConnectsToADataSource capabilities
+      if (options.connectService !== true) {
+        // Store connector's original fetchSchema method
+        fetchSchema = schema.fetchSchema
+        // Mock connector's fetchSchema method with null
+        schema.fetchSchema = null
 
-	it('API-374: should not return 404 when deleting all', function (next) {
-		request({
-			method: 'DELETE',
-			uri: base + '/appc.mongo/super_post',
-			auth: auth
-		}, function (err, response, body) {
-			assert.ifError(err);
-			should(response.statusCode).equal(204);
-			next();
-		});
-	});
+        // Store connector's original create method
+        const connectorCreateFn = connector.create
+        // Mock connector's create method
+        connector.create = () => {
+          // Restore connector's original create method
+          connector.create = connectorCreateFn
 
-});
+          const Connector = Arrow.Connector
+          const Capabilities = Connector.Capabilities
+
+          // Use Connector's capabilities which are suitable
+          // for the unit tests and not for the real connector's work
+          return Connector.extend({
+            filename: path.resolve(__dirname, '../lib/index.js'),
+            capabilities: [
+              Capabilities.CanCreate,
+              Capabilities.CanRetrieve,
+              Capabilities.CanUpdate,
+              Capabilities.CanDelete
+            ]
+          })
+        }
+      }
+
+      const connectPath = path.resolve(__dirname, '..', './lib/lifecycle/connect.js')
+      const disconnectPath = path.resolve(__dirname, '..', './lib/lifecycle/disconnect.js')
+
+      // Mock connect lifecycle method
+      mockery.registerMock(connectPath, {
+        connect: (cb) => { cb() }
+      })
+
+      // Mock disconnect lifecycle method
+      mockery.registerMock(disconnectPath, {
+        disconnect: (cb) => { cb() }
+      })
+
+      // Start Arrow Server
+      server.start(function (err) {
+        if (options.connectService !== true && fetchSchema) {
+          // Restore connector's original fetchSchema method
+          schema.fetchSchema = fetchSchema
+        }
+
+        if (options.createModels !== false) {
+          const connector = server.getConnector('appc.mongo')
+          // Create test model - Post
+          server.addModel(Arrow.createModel('post', {
+            name: 'Post',
+            connector,
+            fields: {
+              title: {
+                type: 'string',
+                required: true
+              },
+              content: {
+                type: 'string',
+                required: false
+              }
+            }
+          }))
+        }
+        mockery.deregisterMock(connectPath)
+        mockery.deregisterMock(disconnectPath)
+        mockery.disable()
+
+        // Return the arrow instance
+        if (err) {
+          reject(err)
+        } else {
+          resolve(server)
+        }
+      })
+    }
+  })
+}

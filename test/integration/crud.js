@@ -722,7 +722,7 @@ describe('CRUD', function () {
 		var Connector = server.getConnector('appc.mongo');
 		should(Connector).be.an.object;
 		should(Connector).have.property('name', 'appc.mongo');
-		var pkg = require('../package.json');
+		var pkg = require('../../package.json');
 		should(Connector).have.property('version', pkg.version);
 	});
 
