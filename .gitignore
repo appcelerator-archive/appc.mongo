@@ -1,8 +1,14 @@
+
 node_modules
 logs
-coverage
 *.tgz
 conf/local.js
 *.log
-.idea
+
+# nyc test coverage
+.nyc_output
+
+# Custom
+.DS_Store
+.vscode
 coverage
