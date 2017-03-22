@@ -1,18 +1,28 @@
 const test = require('tap').test
-const server = require('./../../server')
 const fetchSchema = require('./../../../lib/schema/fetchSchema').fetchSchema
+const server = require('./../../server')
 const sinon = require('sinon')
+const async = require('async')
 var ARROW
 var CONNECTOR
 
-const fetchSchemaSpy = sinon.spy(fetchSchema)
-const cbSpy = sinon.spy();
+const cbSpy = sinon.spy()
+const nextSpy = sinon.spy()
+const errMessage = new Error()
+
+const results = [
+  {
+    ID: '1',
+    name: 'testName',
+    age: 20
+  }
+]
 
 test('### Start Arrow ###', function (t) {
   server()
     .then((inst) => {
       ARROW = inst
-			CONNECTOR = ARROW.getConnector('appc.mongo')
+      CONNECTOR = ARROW.getConnector('appc.mongo')
       t.ok(ARROW, 'Arrow has been started')
       t.end()
     })
@@ -21,29 +31,214 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### fetchSchema ### - No DB case', function(t) {
+test('### fetchSchema - No DB case ###', function (t) {
+  if (CONNECTOR.db) { var temp = CONNECTOR.db }
+  CONNECTOR.db = undefined
 
-	if(CONNECTOR.db)
-		const temp = CONNECTOR.db
-	
-	CONNECTOR.fetchSchema(cbSpy)
+  fetchSchema(nextSpy)
 
-	t.ok(cbSpy.calledOnce)
+  t.ok(nextSpy.calledOnce)
 
-	CONNECTOR.db = temp
+  CONNECTOR.db = temp
 
-	t.end()
+  nextSpy.reset()
+
+  t.end()
 })
 
-test('### fetchSchema ###', function (t) {
-	
-	
-	
-	
-	
-	
-	t.end()
-})
+test('### fetchSchema - Error case ###', sinon.test(function (t) {
+  const collections = [{
+    collectionName: 'col',
+    find: () => {
+      return {
+        sort: (arg) => {
+          return {
+            limit: (arg) => {
+              return {
+                toArray: (cb) => {
+                  cb(errMessage)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }]
+
+  const asyncStub = sinon.stub(
+    async,
+    'each',
+    (collections, forEachCB, callback) => {
+      forEachCB(collections[0], cbSpy)
+    }
+  )
+
+  if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
+
+  CONNECTOR.db = {
+    collections: (cb) => {
+      cb(null, collections)
+    }
+  }
+
+  fetchSchema.apply(CONNECTOR, cbSpy)
+
+  t.ok(cbSpy.calledOnce)
+  t.ok(cbSpy.calledWith(errMessage))
+  t.ok(asyncStub.calledOnce)
+
+  CONNECTOR.db.collections = temp
+  cbSpy.reset()
+  asyncStub.restore()
+
+  t.end()
+}))
+
+test('### fetchSchema - Schema Error case ###', sinon.test(function (t) {
+  const collections = [{
+    collectionName: 'col',
+    find: () => {
+      return {
+        sort: (arg) => {
+          return {
+            limit: (arg) => {
+              return {
+                toArray: (cb) => {
+                  cb(errMessage)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }]
+
+  const asyncStub = sinon.stub(
+    async,
+    'each',
+    (collections, forEachCB, callback) => {
+      callback(errMessage)
+    }
+  )
+
+  if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
+
+  CONNECTOR.db = {
+    collections: (cb) => {
+      cb(null, collections)
+    }
+  }
+
+  fetchSchema.apply(CONNECTOR, [nextSpy])
+
+  t.ok(nextSpy.calledOnce)
+  t.ok(nextSpy.calledWith(errMessage))
+  t.ok(asyncStub.calledOnce)
+
+  CONNECTOR.db.collections = temp
+  nextSpy.reset()
+  asyncStub.restore()
+
+  t.end()
+}))
+
+test('### fetchSchema - Callback Success case ###', sinon.test(function (t) {
+  const collections = [{
+    collectionName: 'col',
+    find: () => {
+      return {
+        sort: (arg) => {
+          return {
+            limit: (arg) => {
+              return {
+                toArray: (cb) => {
+                  cb(errMessage)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }]
+
+  const asyncStub = sinon.stub(
+    async,
+    'each',
+    (collections, forEachCB, callback) => {
+      callback()
+    }
+  )
+
+  if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
+
+  CONNECTOR.db = {
+    collections: (cb) => {
+      cb(null, collections)
+    }
+  }
+
+  fetchSchema.apply(CONNECTOR, [nextSpy])
+
+  t.ok(nextSpy.calledOnce)
+  t.ok(asyncStub.calledOnce)
+
+  CONNECTOR.db.collections = temp
+  nextSpy.reset()
+  asyncStub.restore()
+
+  t.end()
+}))
+
+test('### fetchSchema - Success case ###', sinon.test(function (t) {
+  const collections = [{
+    collectionName: 'col',
+    find: () => {
+      return {
+        sort: (arg) => {
+          return {
+            limit: (arg) => {
+              return {
+                toArray: (cb) => {
+                  cb(null, results)
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }]
+
+  const asyncStub = sinon.stub(
+    async,
+    'each',
+    (collections, forEachCB, callback) => {
+      forEachCB(collections[0], cbSpy)
+    }
+  )
+
+  if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
+
+  CONNECTOR.db = {
+    collections: (cb) => {
+      cb(null, collections)
+    }
+  }
+
+  fetchSchema.apply(CONNECTOR, [nextSpy])
+
+  t.ok(cbSpy.calledOnce)
+  t.ok(asyncStub.calledOnce)
+
+  CONNECTOR.db.collections = temp
+  nextSpy.reset()
+  asyncStub.restore()
+
+  t.end()
+}))
 
 test('### Stop Arrow ###', function (t) {
   ARROW.stop(function () {

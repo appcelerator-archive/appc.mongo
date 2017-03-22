@@ -1,7 +1,7 @@
 const test = require('tap').test
 const server = require('./../../server')
-const createModelsFromSchema = require('./../../../lib/schema/createModelsFromSchema').createModelsFromSchema
 const sinon = require('sinon')
+const blueprint = require('Arrow')
 var ARROW
 var CONNECTOR
 
@@ -9,7 +9,7 @@ test('### Start Arrow ###', function (t) {
   server()
     .then((inst) => {
       ARROW = inst
-			CONNECTOR = ARROW.getConnector('appc.mongo')
+      CONNECTOR = ARROW.getConnector('appc.mongo')
       t.ok(ARROW, 'Arrow has been started')
       t.end()
     })
@@ -18,21 +18,20 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### createModelsFromSchema ###', sinon.test(function(t) {
+test('### createModelsFromSchema ###', sinon.test(function (t) {
+  if (CONNECTOR.schema) { var temp = CONNECTOR.schema }
 
-	if(CONNECTOR.schema)
-		const temp = CONNECTOR.schema
-	
-	CONNECTOR.schema = {objects: {test: "test"}}
+  CONNECTOR.schema = { objects: { test: 'test' } }
 
-	const createModelsFromSchemaSpy = sinon.spy(createModelsFromSchema)
+  const extendModelSpy = sinon.spy(blueprint.Model, 'extend')
 
-	CONNECTOR.createModelsFromSchema();
+  CONNECTOR.createModelsFromSchema()
 
-	t.ok(createModelsFromSchemaSpy.returnValues)
+  t.ok(extendModelSpy.calledOnce)
+  t.ok(CONNECTOR.models)
 
-	CONNECTOR.schema = temp
-	t.end()
+  CONNECTOR.schema = temp
+  t.end()
 }))
 
 test('### Stop Arrow ###', function (t) {
