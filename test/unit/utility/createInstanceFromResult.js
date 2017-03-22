@@ -1,7 +1,5 @@
 const test = require('tap').test
-const disconnect = require('./../../../lib/lifecycle/disconnect').disconnect
 const server = require('./../../server')
-const sinon = require('sinon')
 var ARROW
 var CONNECTOR
 
@@ -18,19 +16,23 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### disconnect ###', function (t) {
-  function func (opt) { }
-  const cbSpy = sinon.spy(func)
+test('### createInstanceFromResult ###', function (t) {
+  var key
 
-  CONNECTOR.db = {
-    close: (next) => {
-      return next()
-    }
+  const post = {
+    _id: '1',
+    title: 'testTitle',
+    content: 'testContent'
   }
 
-  disconnect.apply(CONNECTOR, [cbSpy])
+  const Model = ARROW.getModel('Posts')
 
-  t.ok(cbSpy.calledOnce)
+  const instance = CONNECTOR.createInstanceFromResult(Model, post)
+
+  t.ok(instance)
+  for (key in post) {
+    t.equals(post[key], instance[key])
+  }
 
   t.end()
 })
