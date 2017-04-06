@@ -47,7 +47,7 @@ test('### calculateQueryParams - options.sel ###', function (t) {
     }
   }
 
-  const returnedOptions = CONNECTOR.calculateQueryParams(options)
+  const returnedOptions = calculateQueryParams.call(CONNECTOR, options)
   const selected = returnedOptions.fields
   const optionWhere = returnedOptions.where
 

@@ -8,7 +8,7 @@ timestamps {
 		}
 
 		stage('Configuration') {
-			sh "echo \"module.exports = { connectors: { 'appc.mongo': { url: 'mongodb://jenkin:mmpResearch4@ds049104.mongolab.com:49104/appcmongo' } } };\" > conf/local.js"
+			sh "echo \"module.exports = { connectors: { 'appc.mongo': { } } };\" > conf/local.js"
 		}
 
 		buildConnector {

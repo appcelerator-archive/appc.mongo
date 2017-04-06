@@ -23,12 +23,10 @@
   "scripts": {
     "start": "appc run",
     "lint": "standard --fix",
-    "check-security": "nsp check || true",
-    "check-deps": "retire || true",
+    "security": "retire --exitwith 0 --outputpath scan-retire.txt && nsp check --output writefile --warn-only",
     "clean": "rimraf ./tmp",
-    "checks": "npm run check-deps && npm run check-security",
-    "test": "npm run checks && npm run test:unit && npm run clean",
-    "test:coverage": "nyc check-coverage --lines 90 --functions 95 --branches 85 --statements 90",
+    "test": "npm run lint && npm run security && npm run test:unit && npm run clean",
+    "test:coverage": "nyc check-coverage --lines 90 --functions 90 --branches 70 --statements 90",
     "test:unit": "tap ./test/unit/* --color --bail --coverage --coverage-report=html && npm run test:coverage",
     "test:integration": "grunt"
   },
@@ -37,15 +35,13 @@
     "async": "^1.5.0",
     "lodash": "^3.10.1",
     "mongodb": "^2.0.47",
-    "semver": "^5.0.3",
-    "shortid": "^2.2.4"
+    "semver": "^5.0.3"
   },
   "devDependencies": {
     "arrow": "^*",
     "grunt": "^0.4.5",
     "grunt-mocha-test": "^0.13.2",
     "mocha": "^1.21.4",
-    "mockery": "^2.0.0",
     "nsp": "^2.6.3",
     "nyc": "^10.1.2",
     "request": "^2.81.0",

@@ -1,0 +1,53 @@
+Downloading https://raw.githubusercontent.com/RetireJS/retire.js/master/repository/jsrepository.json ...
+Downloading https://raw.githubusercontent.com/RetireJS/retire.js/master/repository/npmrepository.json ...
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/arrow-admin/dist/app.js
+ ↳ jquery 2.1.4 has known vulnerabilities: severity: medium; issue: 2432, summary: 3rd party CORS request may execute; https://github.com/jquery/jquery/issues/2432 http://blog.jquery.com/2016/01/08/jquery-2-2-and-1-12-released/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/arrow-admin/dist/jquery/jquery.js
+ ↳ jquery 2.1.4 has known vulnerabilities: severity: medium; issue: 2432, summary: 3rd party CORS request may execute; https://github.com/jquery/jquery/issues/2432 http://blog.jquery.com/2016/01/08/jquery-2-2-and-1-12-released/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/arrow-admin/dist/moment/moment.js
+ ↳ moment.js 2.7.0 has known vulnerabilities: severity: low; summary: reDOS - regular expression denial of service; https://github.com/moment/moment/issues/2936
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/grunt/node_modules/underscore.string/test/test_underscore/vendor/jquery.js
+ ↳ jquery 1.3.2 has known vulnerabilities: severity: medium; CVE: CVE-2011-4969; http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2011-4969 http://research.insecurelabs.org/jquery/test/ severity: medium; bug: 11290, summary: Selector interpreted as HTML; http://bugs.jquery.com/ticket/11290 http://research.insecurelabs.org/jquery/test/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/arrow-admin/dist/history/vendor/jquery.js
+ ↳ jquery 1.9.1 has known vulnerabilities: severity: medium; issue: 2432, summary: 3rd party CORS request may execute; https://github.com/jquery/jquery/issues/2432 http://blog.jquery.com/2016/01/08/jquery-2-2-and-1-12-released/
+Could not parse file: /Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/ldapauth-fork/node_modules/bcryptjs/src/bower.json
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/acs/node_modules/esprima/assets/yui/treeview-min.js
+ ↳ YUI 2.9.0 has known vulnerabilities: severity: high; CVE: CVE-2012-5883; http://www.cvedetails.com/cve/CVE-2012-5883/ severity: high; CVE: CVE-2012-5882; http://www.cvedetails.com/cve/CVE-2012-5882/ severity: high; CVE: CVE-2012-5881; http://www.cvedetails.com/cve/CVE-2012-5881/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/acs/node_modules/esprima/assets/yui/yahoo-dom-event.js
+ ↳ YUI 2.9.0 has known vulnerabilities: severity: high; CVE: CVE-2012-5883; http://www.cvedetails.com/cve/CVE-2012-5883/ severity: high; CVE: CVE-2012-5882; http://www.cvedetails.com/cve/CVE-2012-5882/ severity: high; CVE: CVE-2012-5881; http://www.cvedetails.com/cve/CVE-2012-5881/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/acs/node_modules/esprima/test/3rdparty/jquery-1.6.4.js
+ ↳ jquery 1.6.4 has known vulnerabilities: severity: medium; bug: 11290, summary: Selector interpreted as HTML; http://bugs.jquery.com/ticket/11290 http://research.insecurelabs.org/jquery/test/ severity: medium; issue: 2432, summary: 3rd party CORS request may execute; https://github.com/jquery/jquery/issues/2432 http://blog.jquery.com/2016/01/08/jquery-2-2-and-1-12-released/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/acs/node_modules/esprima/test/3rdparty/jquery-1.7.1.js
+ ↳ jquery 1.7.1 has known vulnerabilities: severity: medium; bug: 11290, summary: Selector interpreted as HTML; http://bugs.jquery.com/ticket/11290 http://research.insecurelabs.org/jquery/test/ severity: medium; issue: 2432, summary: 3rd party CORS request may execute; https://github.com/jquery/jquery/issues/2432 http://blog.jquery.com/2016/01/08/jquery-2-2-and-1-12-released/
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/arrow/node_modules/acs/node_modules/esprima/test/3rdparty/jquery.mobile-1.0.js
+ ↳ jquery-mobile 1.0 has known vulnerabilities: severity: high; osvdb: 94317; http://osvdb.org/show/osvdb/94317 severity: medium; issue: 4787, release: http://jquerymobile.com/changelog/1.1.2/, summary: location.href cross-site scripting; http://jquerymobile.com/changelog/1.1.2/ https://github.com/jquery/jquery-mobile/issues/4787 severity: medium; issue: 4787, release: http://jquerymobile.com/changelog/1.2.0/, summary: location.href cross-site scripting; http://jquerymobile.com/changelog/1.2.0/ https://github.com/jquery/jquery-mobile/issues/4787 severity: medium; summary: open redirect leads to cross site scripting; http://sirdarckcat.blogspot.no/2017/02/unpatched-0day-jquery-mobile-xss.html
+/Users/emilruzhenov/CodeReview/appc.mongo/node_modules/grunt/node_modules/grunt-legacy-log/node_modules/underscore.string/test/test_underscore/vendor/jquery.js
+ ↳ jquery 1.7.2 has known vulnerabilities: severity: medium; bug: 11290, summary: Selector interpreted as HTML; http://bugs.jquery.com/ticket/11290 http://research.insecurelabs.org/jquery/test/ severity: medium; issue: 2432, summary: 3rd party CORS request may execute; https://github.com/jquery/jquery/issues/2432 http://blog.jquery.com/2016/01/08/jquery-2-2-and-1-12-released/
+tough-cookie 2.2.2 has known vulnerabilities:  advisory: ReDoS via long string of semicolons; https://nodesecurity.io/advisories/130
+appc.mongo 1.2.0
+↳ arrow 1.10.2
+ ↳ acs 1.2.3
+  ↳ npm 3.8.9
+   ↳ request 2.72.0
+    ↳ tough-cookie 2.2.2
+tough-cookie 2.2.2 has known vulnerabilities:  advisory: ReDoS via long string of semicolons; https://nodesecurity.io/advisories/130
+appc.mongo 1.2.0
+↳ arrow 1.10.2
+ ↳ acs 1.2.3
+  ↳ npm 3.8.9
+   ↳ npm-registry-client 7.1.0
+    ↳ request 2.72.0
+     ↳ tough-cookie 2.2.2
+tough-cookie 2.2.2 has known vulnerabilities:  advisory: ReDoS via long string of semicolons; https://nodesecurity.io/advisories/130
+appc.mongo 1.2.0
+↳ arrow 1.10.2
+ ↳ acs 1.2.3
+  ↳ npm 3.8.9
+   ↳ node-gyp 3.3.1
+    ↳ request 2.72.0
+     ↳ tough-cookie 2.2.2
+ms 0.6.2 has known vulnerabilities:  severity: medium; summary: Regular expression denial of service; https://nodesecurity.io/advisories/46
+appc.mongo 1.2.0
+↳ mocha 1.21.5
+ ↳ debug 2.0.0
+  ↳ ms 0.6.2
