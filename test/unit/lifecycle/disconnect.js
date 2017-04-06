@@ -1,8 +1,7 @@
 const test = require('tap').test
+const disconnect = require('./../../../lib/lifecycle/disconnect').disconnect
 const server = require('./../../server')
 const sinon = require('sinon')
-var arrow = require('arrow')
-
 var ARROW
 var CONNECTOR
 
@@ -19,21 +18,22 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### createModelsFromSchema ###', sinon.test(function (t) {
-  if (CONNECTOR.schema) { var temp = CONNECTOR.schema }
+test('### disconnect ###', function (t) {
+  function func (opt) { }
+  const cbSpy = sinon.spy(func)
 
-  CONNECTOR.schema = { objects: { test: 'test' } }
+  CONNECTOR.db = {
+    close: (next) => {
+      return next()
+    }
+  }
 
-  const extendModelStub = this.stub(arrow.Model, 'extend', () => {})
+  disconnect.apply(CONNECTOR, [cbSpy])
 
-  CONNECTOR.createModelsFromSchema()
+  t.ok(cbSpy.calledOnce)
 
-  t.ok(extendModelStub.calledOnce)
-  t.ok(CONNECTOR.models)
-
-  CONNECTOR.schema = temp
   t.end()
-}))
+})
 
 test('### Stop Arrow ###', function (t) {
   ARROW.stop(function () {
