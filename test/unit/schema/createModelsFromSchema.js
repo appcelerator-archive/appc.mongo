@@ -1,7 +1,8 @@
 const test = require('tap').test
 const server = require('./../../server')
 const sinon = require('sinon')
-const blueprint = require('Arrow')
+var arrow = require('arrow')
+
 var ARROW
 var CONNECTOR
 
@@ -23,11 +24,11 @@ test('### createModelsFromSchema ###', sinon.test(function (t) {
 
   CONNECTOR.schema = { objects: { test: 'test' } }
 
-  const extendModelSpy = sinon.spy(blueprint.Model, 'extend')
+  const extendModelStub = this.stub(arrow.Model, 'extend', () => {})
 
   CONNECTOR.createModelsFromSchema()
 
-  t.ok(extendModelSpy.calledOnce)
+  t.ok(extendModelStub.calledOnce)
   t.ok(CONNECTOR.models)
 
   CONNECTOR.schema = temp
