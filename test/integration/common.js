@@ -5,7 +5,7 @@ var path = require('path'),
 	MongoClient = MongoDB.MongoClient;
 
 // Create a test collection.
-var config = new (Arrow.Loader)(path.resolve(__dirname + '/../')),
+var config = new (Arrow.Loader)(path.resolve(__dirname + '/../../')),
 	mongoURL = config.connectors['appc.mongo'].url;
 
 var server = new Arrow();
