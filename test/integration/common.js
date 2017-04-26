@@ -15,7 +15,6 @@ exports.server = server;
 exports.connector = server.getConnector('appc.mongo');
 
 before(function before(next) {
-	this.timeout(30000);
 	server.start(next);
 });
 

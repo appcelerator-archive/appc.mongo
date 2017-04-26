@@ -13,7 +13,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('createTestData', function () {
     var done = this.async()
-    var mongoURL = 'mongodb://localhost/arrow'
+    var config = require('./conf/local').connectors['appc.mongo']
+    var mongoURL = config.url
     var MongoDB = require('mongodb')
     var MongoClient = MongoDB.MongoClient
     MongoClient.connect(mongoURL, function didConnect (err, db) {
@@ -34,11 +35,12 @@ module.exports = function (grunt) {
   })
 
   grunt.registerTask('cleanTestData', function () {
-    var done = this.async();
-    var mongoURL = 'mongodb://localhost/arrow'
+    var done = this.async()
+    var config = require('./conf/local').connectors['appc.mongo']
+    var mongoURL = config.url
     var MongoDB = require('mongodb')
     var MongoClient = MongoDB.MongoClient
-    MongoClient.connect(mongoURL, function didConnect(err, db) {
+    MongoClient.connect(mongoURL, function didConnect (err, db) {
       if (err) {
         return console.error(err)
       }
