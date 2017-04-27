@@ -12,3 +12,4 @@ conf/local.js
 .DS_Store
 .vscode
 coverage
+scan-retire.txt
