@@ -32,7 +32,7 @@
     "lint": "standard --fix",
     "security": "retire --exitwith 0 --outputpath scan-retire.json && nsp check --output json > scan-nsp.json",
     "clean": "rimraf ./tmp && rimraf dist/* coverage/*",
-    "test": "npm run lint && npm run security && npm run test:unit && npm run clean",
+    "test": "npm run security && npm run test:unit && npm run clean",
     "test:coverage": "nyc check-coverage --lines 90 --functions 90 --branches 70 --statements 90",
     "test:unit": "tap ./test/unit/* --color --bail --coverage --coverage-report=html && npm run test:coverage",
     "test:integration": "grunt"
