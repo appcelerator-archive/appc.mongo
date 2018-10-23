@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const deleteAllMethod = require('./../../../lib/methods/deleteAll').deleteAll
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 var ARROW
 var CONNECTOR
@@ -19,21 +21,17 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Error collection.remove method - cb(err) ###', sinon.test(function (t) {
+test('### Error collection.remove method - cb(err) ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, paramList, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, paramList, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
   deleteAllMethod.bind(CONNECTOR, Model, cbSpy)()
 
@@ -43,22 +41,18 @@ test('### Error collection.remove method - cb(err) ###', sinon.test(functi
   t.end()
 }))
 
-test('### Response collection.remove  ###', sinon.test(function (t) {
+test('### Response collection.remove  ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const count = {}
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, paramList, cb) => {
-          cb(null, count)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, paramList, cb) => {
+        cb(null, count)
       }
     }
-  )
+  })
 
   deleteAllMethod.bind(CONNECTOR, Model, cbSpy)()
 
@@ -68,22 +62,18 @@ test('### Response collection.remove  ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Error cb(err) - removed value ###', sinon.test(function (t) {
+test('### Error cb(err) - removed value ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const count = 0
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, paramList, cb) => {
-          cb(null, count)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, paramList, cb) => {
+        cb(null, count)
       }
     }
-  )
+  })
 
   deleteAllMethod.bind(CONNECTOR, Model, cbSpy)()
 

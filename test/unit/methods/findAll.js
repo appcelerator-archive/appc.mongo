@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const findAllMethod = require('./../../../lib/methods/findAll').findAll
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errMessage = 'error'
 var ARROW
 var CONNECTOR
@@ -19,29 +21,25 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### findAll collection error response ###', sinon.test(function (t) {
+test('### findAll collection error response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        find: () => {
-          return {
-            limit: (arg) => {
-              return {
-                toArray: (cb) => {
-                  cb(errMessage)
-                }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      find: () => {
+        return {
+          limit: (arg) => {
+            return {
+              toArray: (cb) => {
+                cb(errMessage)
               }
             }
           }
         }
       }
     }
-  )
+  })
 
   findAllMethod.bind(CONNECTOR, Model, cbSpy)()
 
@@ -51,30 +49,26 @@ test('### findAll collection error response ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### findAll collection response ###', sinon.test(function (t) {
+test('### findAll collection response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const results = {}
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        find: () => {
-          return {
-            limit: (arg) => {
-              return {
-                toArray: (cb) => {
-                  cb(null, results)
-                }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      find: () => {
+        return {
+          limit: (arg) => {
+            return {
+              toArray: (cb) => {
+                cb(null, results)
               }
             }
           }
         }
       }
     }
-  )
+  })
 
   findAllMethod.bind(CONNECTOR, Model, cbSpy)()
 

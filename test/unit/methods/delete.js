@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const deleteMethod = require('./../../../lib/methods/delete').delete
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const instance = {
   getPrimaryKey: () => { }
@@ -22,29 +24,21 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Error collection.remove method - cb(err) ###', sinon.test(function (t) {
+test('### Error collection.remove method - cb(err) ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (instance) => {
-      return true
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((instance) => {
+    return true
+  })
 
   deleteMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
@@ -55,22 +49,18 @@ test('### Error collection.remove method - cb(err) ###', sinon.test(functi
   t.end()
 }))
 
-test('### Response collection.remove method  ###', sinon.test(function (t) {
+test('### Response collection.remove method  ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const removed = {}
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, cb) => {
-          cb(null, removed)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, cb) => {
+        cb(null, removed)
       }
     }
-  )
+  })
 
   deleteMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
@@ -80,22 +70,18 @@ test('### Response collection.remove method  ###', sinon.test(function (t) 
   t.end()
 }))
 
-test('### Error - instance ###', sinon.test(function (t) {
+test('### Error - instance ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const results = 1
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, cb) => {
-          cb(null, results)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, cb) => {
+        cb(null, results)
       }
     }
-  )
+  })
 
   deleteMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
@@ -105,29 +91,21 @@ test('### Error - instance ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Error query ###', sinon.test(function (t) {
+test('### Error query ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        remove: (query, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      remove: (query, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (instance) => {
-      return false
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((instance) => {
+    return false
+  })
 
   deleteMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 

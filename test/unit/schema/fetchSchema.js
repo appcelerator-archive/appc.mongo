@@ -2,6 +2,8 @@ const test = require('tap').test
 const fetchSchema = require('./../../../lib/schema/fetchSchema').fetchSchema
 const server = require('./../../server')
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const async = require('async')
 var ARROW
 var CONNECTOR
@@ -41,12 +43,12 @@ test('### fetchSchema - No DB case ###', function (t) {
 
   CONNECTOR.db = temp
 
-  nextSpy.reset()
+  nextSpy.resetHistory()
 
   t.end()
 })
 
-test('### fetchSchema - Error case ###', sinon.test(function (t) {
+test('### fetchSchema - Error case ###', testWrap(function (t) {
   const collections = [{
     collectionName: 'col',
     find: () => {
@@ -66,13 +68,9 @@ test('### fetchSchema - Error case ###', sinon.test(function (t) {
     }
   }]
 
-  const asyncStub = sinon.stub(
-    async,
-    'each',
-    (collections, forEachCB, callback) => {
-      forEachCB(collections[0], cbSpy)
-    }
-  )
+  const asyncStub = this.stub(async, 'each').callsFake((collections, forEachCB, callback) => {
+    forEachCB(collections[0], cbSpy)
+  })
 
   if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
 
@@ -89,13 +87,13 @@ test('### fetchSchema - Error case ###', sinon.test(function (t) {
   t.ok(asyncStub.calledOnce)
 
   CONNECTOR.db.collections = temp
-  cbSpy.reset()
+  cbSpy.resetHistory()
   asyncStub.restore()
 
   t.end()
 }))
 
-test('### fetchSchema - Schema Error case ###', sinon.test(function (t) {
+test('### fetchSchema - Schema Error case ###', testWrap(function (t) {
   const collections = [{
     collectionName: 'col',
     find: () => {
@@ -115,13 +113,9 @@ test('### fetchSchema - Schema Error case ###', sinon.test(function (t) {
     }
   }]
 
-  const asyncStub = sinon.stub(
-    async,
-    'each',
-    (collections, forEachCB, callback) => {
-      callback(errMessage)
-    }
-  )
+  const asyncStub = this.stub(async, 'each').callsFake((collections, forEachCB, callback) => {
+    callback(errMessage)
+  })
 
   if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
 
@@ -138,13 +132,13 @@ test('### fetchSchema - Schema Error case ###', sinon.test(function (t) {
   t.ok(asyncStub.calledOnce)
 
   CONNECTOR.db.collections = temp
-  nextSpy.reset()
+  nextSpy.resetHistory()
   asyncStub.restore()
 
   t.end()
 }))
 
-test('### fetchSchema - Callback Success case ###', sinon.test(function (t) {
+test('### fetchSchema - Callback Success case ###', testWrap(function (t) {
   const collections = [{
     collectionName: 'col',
     find: () => {
@@ -164,13 +158,9 @@ test('### fetchSchema - Callback Success case ###', sinon.test(function (t) {
     }
   }]
 
-  const asyncStub = sinon.stub(
-    async,
-    'each',
-    (collections, forEachCB, callback) => {
-      callback()
-    }
-  )
+  const asyncStub = this.stub(async, 'each').callsFake((collections, forEachCB, callback) => {
+    callback()
+  })
 
   if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
 
@@ -186,13 +176,13 @@ test('### fetchSchema - Callback Success case ###', sinon.test(function (t) {
   t.ok(asyncStub.calledOnce)
 
   CONNECTOR.db.collections = temp
-  nextSpy.reset()
+  nextSpy.resetHistory()
   asyncStub.restore()
 
   t.end()
 }))
 
-test('### fetchSchema - Success case ###', sinon.test(function (t) {
+test('### fetchSchema - Success case ###', testWrap(function (t) {
   const collections = [{
     collectionName: 'col',
     find: () => {
@@ -212,13 +202,9 @@ test('### fetchSchema - Success case ###', sinon.test(function (t) {
     }
   }]
 
-  const asyncStub = sinon.stub(
-    async,
-    'each',
-    (collections, forEachCB, callback) => {
-      forEachCB(collections[0], cbSpy)
-    }
-  )
+  const asyncStub = this.stub(async, 'each').callsFake((collections, forEachCB, callback) => {
+    forEachCB(collections[0], cbSpy)
+  })
 
   if (CONNECTOR.db && CONNECTOR.db.collections) { var temp = CONNECTOR.db.collections }
 
@@ -234,7 +220,7 @@ test('### fetchSchema - Success case ###', sinon.test(function (t) {
   t.ok(asyncStub.calledOnce)
 
   CONNECTOR.db.collections = temp
-  nextSpy.reset()
+  nextSpy.resetHistory()
   asyncStub.restore()
 
   t.end()

@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const createMethod = require('./../../../lib/methods/create').create
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const instance = {}
 const result = {}
@@ -21,33 +23,25 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Error - collection.insert method ###', sinon.test(function (t) {
+test('### Error - collection.insert method ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const instanceStub = this.stub(
-    Model,
-    'instance',
-    (values, falseValue) => {
-      return {
-        toPayload: () => {
-          return true
-        }
+  const instanceStub = this.stub(Model, 'instance').callsFake((values, falseValue) => {
+    return {
+      toPayload: () => {
+        return true
       }
     }
-  )
+  })
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        insert: (payload, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      insert: (payload, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
   createMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
@@ -59,21 +53,17 @@ test('### Error - collection.insert method ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Response - collection.find method ###', sinon.test(function (t) {
+test('### Response - collection.find method ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        insert: (payload, cb) => {
-          cb(null, result)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      insert: (payload, cb) => {
+        cb(null, result)
       }
     }
-  )
+  })
 
   createMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
@@ -83,31 +73,23 @@ test('### Response - collection.find method ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Response - create Instance From Result ###', sinon.test(function (t) {
+test('### Response - create Instance From Result ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
   result.ops = ['data']
 
-  const createInstanceFromResultStub = this.stub(
-    CONNECTOR,
-    'createInstanceFromResult',
-    (Model, resuls) => {
-      return true
-    }
-  )
+  const createInstanceFromResultStub = this.stub(CONNECTOR, 'createInstanceFromResult').callsFake((Model, resuls) => {
+    return true
+  })
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        insert: (payload, cb) => {
-          cb(null, result)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      insert: (payload, cb) => {
+        cb(null, result)
       }
     }
-  )
+  })
 
   createMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 

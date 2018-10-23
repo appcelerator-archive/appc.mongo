@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const upsertMethod = require('./../../../lib/methods/upsert').upsert
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const objParams = {}
 var ARROW
@@ -20,21 +22,17 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### collection.findAndModify error response ###', sinon.test(function (t) {
+test('### collection.findAndModify error response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findAndModify: (query, obj, document, objParams, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findAndModify: (query, obj, document, objParams, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
   upsertMethod.bind(CONNECTOR, Model, 'id', {}, cbSpy)()
 
@@ -45,7 +43,7 @@ test('### collection.findAndModify error response ###', sinon.test(function (t) 
   t.end()
 }))
 
-test('### collection.findAndModify response ###', sinon.test(function (t) {
+test('### collection.findAndModify response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const options = {}
@@ -53,25 +51,17 @@ test('### collection.findAndModify response ###', sinon.test(function (t) {
     value: () => {}
   }
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findAndModify: (query, obj, document, objParams, cb) => {
-          cb(null, results)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findAndModify: (query, obj, document, objParams, cb) => {
+        cb(null, results)
       }
     }
-  )
+  })
 
-  const createInstanceFromResultStub = this.stub(
-    CONNECTOR,
-    'createInstanceFromResult',
-    (Model, results) => {
-      return options
-    }
-  )
+  const createInstanceFromResultStub = this.stub(CONNECTOR, 'createInstanceFromResult').callsFake((Model, results) => {
+    return options
+  })
 
   upsertMethod.bind(CONNECTOR, Model, 'id', objParams, cbSpy)()
 
@@ -82,21 +72,17 @@ test('### collection.findAndModify response ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### collection.insert error response ###', sinon.test(function (t) {
+test('### collection.insert error response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        insert: (document, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      insert: (document, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
   upsertMethod.bind(CONNECTOR, Model, undefined, {}, cbSpy)()
 
@@ -105,7 +91,7 @@ test('### collection.insert error response ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### collection.insert response ###', sinon.test(function (t) {
+test('### collection.insert response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const options = {}
@@ -113,17 +99,13 @@ test('### collection.insert response ###', sinon.test(function (t) {
   }
   results.ops = 'dsad'
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        insert: (document, cb) => {
-          cb(null, options)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      insert: (document, cb) => {
+        cb(null, options)
       }
     }
-  )
+  })
 
   upsertMethod.bind(CONNECTOR, Model, undefined, {}, cbSpy)()
 

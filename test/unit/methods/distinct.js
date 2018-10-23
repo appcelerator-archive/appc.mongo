@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const distinctMethod = require('./../../../lib/methods/distinct').distinct
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const field = {}
 const options = {
@@ -24,22 +26,18 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Error - collection.distinct method ###', sinon.test(function (t) {
+test('### Error - collection.distinct method ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   function cb (errorMessage, data) { }
   const cbSpy = this.spy(cb)
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        distinct: (field, options, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      distinct: (field, options, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
   distinctMethod.bind(CONNECTOR, Model, field, options, cbSpy)()
 
@@ -49,23 +47,19 @@ test('### Error - collection.distinct method ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Response - collection distinct method ###', sinon.test(function (t) {
+test('### Response - collection distinct method ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   function cb (errorMessage, data) { }
   const cbSpy = this.spy(cb)
   const result = {}
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        distinct: (field, options, cb) => {
-          cb(null, result)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      distinct: (field, options, cb) => {
+        cb(null, result)
       }
     }
-  )
+  })
 
   distinctMethod.bind(CONNECTOR, Model, field, options, cbSpy)()
 

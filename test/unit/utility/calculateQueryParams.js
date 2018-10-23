@@ -21,13 +21,9 @@ test('### Start Arrow ###', function (t) {
 test('### calculateQueryParams - options.sel ###', function (t) {
   var item
 
-  const PKStub = sinon.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (id) => {
-      return id
-    }
-  )
+  const PKStub = sinon.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((id) => {
+    return id
+  })
 
   const options = {
     sel: {

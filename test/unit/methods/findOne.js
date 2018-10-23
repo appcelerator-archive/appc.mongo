@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const findOneMethod = require('./../../../lib/methods/findOne').findOne
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 var ARROW
 var CONNECTOR
 
@@ -18,14 +20,10 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### FindOne with console.warn ###', sinon.test(function (t) {
+test('### FindOne with console.warn ###', testWrap(function (t) {
   const logger = CONNECTOR.logger
 
-  const getCollectionStub = this.stub(
-    CONNECTOR.findByID,
-    'apply',
-    () => {}
-  )
+  const getCollectionStub = this.stub(CONNECTOR.findByID, 'apply').callsFake(() => {})
 
   CONNECTOR.logger = false
 
@@ -37,17 +35,10 @@ test('### FindOne with console.warn ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### FindOne with logger ###', sinon.test(function (t) {
-  const getCollectionStub = this.stub(
-    CONNECTOR.findByID,
-    'apply',
-    () => { }
-  )
+test('### FindOne with logger ###', testWrap(function (t) {
+  const getCollectionStub = this.stub(CONNECTOR.findByID, 'apply').callsFake(() => { })
 
-  const loggerStub = this.stub(CONNECTOR.logger,
-    'warn',
-    () => { }
-  )
+  const loggerStub = this.stub(CONNECTOR.logger, 'warn').callsFake(() => { })
 
   findOneMethod.bind(CONNECTOR)()
   t.ok(getCollectionStub.calledOnce)

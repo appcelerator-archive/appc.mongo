@@ -1,6 +1,8 @@
 const test = require('tap').test
 const server = require('./../../server')
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 var ARROW
 var CONNECTOR
 
@@ -17,7 +19,7 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### translateQueryKeys ###', sinon.test(function (t) {
+test('### translateQueryKeys ###', testWrap(function (t) {
   const model = ARROW.getModel('Posts')
 
   const options = {

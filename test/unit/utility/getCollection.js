@@ -1,6 +1,8 @@
 const test = require('tap').test
 const server = require('./../../server')
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 var ARROW
 var CONNECTOR
 
@@ -17,7 +19,7 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### getCollection ###', sinon.test(function (t) {
+test('### getCollection ###', testWrap(function (t) {
   const model = {
     name: 'post',
     getMeta: (modelName) => {
@@ -33,13 +35,9 @@ test('### getCollection ###', sinon.test(function (t) {
     }
   }
 
-  const formatCollectionNameStub = sinon.stub(
-    CONNECTOR,
-    'formatCollectionName',
-    (model) => {
-      return model
-    }
-  )
+  const formatCollectionNameStub = sinon.stub(CONNECTOR, 'formatCollectionName').callsFake((model) => {
+    return model
+  })
 
   const collection = CONNECTOR.getCollection(model)
 
@@ -52,7 +50,7 @@ test('### getCollection ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### getCollection ###', sinon.test(function (t) {
+test('### getCollection ###', testWrap(function (t) {
   const model = {
     name: 'post',
     getMeta: (modelName) => {
@@ -68,13 +66,9 @@ test('### getCollection ###', sinon.test(function (t) {
     }
   }
 
-  const formatCollectionNameStub = sinon.stub(
-    CONNECTOR,
-    'formatCollectionName',
-    (model) => {
-      return model
-    }
-  )
+  const formatCollectionNameStub = sinon.stub(CONNECTOR, 'formatCollectionName').callsFake((model) => {
+    return model
+  })
 
   const collection = CONNECTOR.getCollection(model)
 

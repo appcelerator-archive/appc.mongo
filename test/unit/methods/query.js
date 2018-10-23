@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const queryMethod = require('./../../../lib/methods/query').query
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const options = {
   where: () => {},
@@ -24,7 +26,7 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Query collection cb error ###', sinon.test(function (t) {
+test('### Query collection cb error ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const cursorStub = (cb) => {
@@ -35,33 +37,21 @@ test('### Query collection cb error ###', sinon.test(function (t) {
     each: cursorStub
   }
 
-  const translateQueryKeys = this.stub(
-    CONNECTOR,
-    'translateQueryKeys',
-    (Model, options) => {
-      return options
-    }
-  )
+  const translateQueryKeys = this.stub(CONNECTOR, 'translateQueryKeys').callsFake((Model, options) => {
+    return options
+  })
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        find: (options, fields, obj, cb) => {
-          cb(null, cursorObj)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      find: (options, fields, obj, cb) => {
+        cb(null, cursorObj)
       }
     }
-  )
+  })
 
-  const createInstanceFromResultStub = this.stub(
-    CONNECTOR,
-    'createInstanceFromResult',
-    (Model, doc) => {
-      return {}
-    }
-  )
+  const createInstanceFromResultStub = this.stub(CONNECTOR, 'createInstanceFromResult').callsFake((Model, doc) => {
+    return {}
+  })
 
   queryMethod.bind(CONNECTOR, Model, options, cbSpy)()
 
@@ -72,7 +62,7 @@ test('### Query collection cb error ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Query collection cb response  ###', sinon.test(function (t) {
+test('### Query collection cb response  ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const cursorStub = (cb) => {
@@ -83,25 +73,17 @@ test('### Query collection cb response  ###', sinon.test(function (t) {
     each: cursorStub
   }
 
-  const translateQueryKeys = this.stub(
-    CONNECTOR,
-    'translateQueryKeys',
-    (Model, options) => {
-      return options
-    }
-  )
+  const translateQueryKeys = this.stub(CONNECTOR, 'translateQueryKeys').callsFake((Model, options) => {
+    return options
+  })
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        find: (options, fields, obj, cb) => {
-          cb(null, cursorObj)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      find: (options, fields, obj, cb) => {
+        cb(null, cursorObj)
       }
     }
-  )
+  })
 
   queryMethod.bind(CONNECTOR, Model, options, cbSpy)()
 

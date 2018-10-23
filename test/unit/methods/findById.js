@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const findByIDMethod = require('./../../../lib/methods/findByID').findByID
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const value = 'data'
 var ARROW
@@ -20,29 +22,21 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Collection findOne error - cb(err) ###', sinon.test(function (t) {
+test('### Collection findOne error - cb(err) ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findOne: (query, obj, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findOne: (query, obj, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (value) => {
-      return {}
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((value) => {
+    return {}
+  })
 
   findByIDMethod.bind(CONNECTOR, Model, value, cbSpy)()
 
@@ -53,22 +47,18 @@ test('### Collection findOne error - cb(err) ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Response collection.findOne ###', sinon.test(function (t) {
+test('### Response collection.findOne ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const doc = {}
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findOne: (query, obj, cb) => {
-          cb(null, doc)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findOne: (query, obj, cb) => {
+        cb(null, doc)
       }
     }
-  )
+  })
 
   findByIDMethod.bind(CONNECTOR, Model, {}, cbSpy)()
 
@@ -78,29 +68,21 @@ test('### Response collection.findOne ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### createPrimaryKeyQuery  response ###', sinon.test(function (t) {
+test('### createPrimaryKeyQuery  response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findOne: (query, obj, cb) => {
-          cb()
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findOne: (query, obj, cb) => {
+        cb()
       }
     }
-  )
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (value) => {
-      return {}
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((value) => {
+    return {}
+  })
 
   findByIDMethod.bind(CONNECTOR, Model, value, cbSpy)()
 
@@ -111,21 +93,17 @@ test('### createPrimaryKeyQuery  response ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### Cb() - doc param ###', sinon.test(function (t) {
+test('### Cb() - doc param ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findOne: (query, obj, cb) => {
-          cb()
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findOne: (query, obj, cb) => {
+        cb()
       }
     }
-  )
+  })
 
   findByIDMethod.bind(CONNECTOR, Model, value, cbSpy)()
 
@@ -135,37 +113,25 @@ test('### Cb() - doc param ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### createInstanceFromResult response ###', sinon.test(function (t) {
+test('### createInstanceFromResult response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const instance = {}
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findOne: (query, obj, cb) => {
-          cb(null, instance)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findOne: (query, obj, cb) => {
+        cb(null, instance)
       }
     }
-  )
+  })
 
-  const createInstanceFromResultStub = this.stub(
-    CONNECTOR,
-    'createInstanceFromResult',
-    (Model, doc) => {
-      return {}
-    }
-  )
+  const createInstanceFromResultStub = this.stub(CONNECTOR, 'createInstanceFromResult').callsFake((Model, doc) => {
+    return {}
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (value) => {
-      return {}
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((value) => {
+    return {}
+  })
 
   findByIDMethod.bind(CONNECTOR, Model, value, cbSpy)()
 

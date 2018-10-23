@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const findAndModifyMethod = require('./../../../lib/methods/findAndModify').findAndModify
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const errorMessage = 'error'
 const findOptions = {
   order: {
@@ -26,37 +28,25 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### Error collection.findAndModify - cb(err) ###', sinon.test(function (t) {
+test('### Error collection.findAndModify - cb(err) ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findAndModify: (options, order, doc, args, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findAndModify: (options, order, doc, args, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
-  const translateQueryKeysStub = this.stub(
-    CONNECTOR,
-    'translateQueryKeys',
-    (Model, options) => {
-      return options
-    }
-  )
+  const translateQueryKeysStub = this.stub(CONNECTOR, 'translateQueryKeys').callsFake((Model, options) => {
+    return options
+  })
 
-  const calculateQueryParamsStub = this.stub(
-    CONNECTOR,
-    'calculateQueryParams',
-    (options) => {
-      return options
-    }
-  )
+  const calculateQueryParamsStub = this.stub(CONNECTOR, 'calculateQueryParams').callsFake((options) => {
+    return options
+  })
 
   findAndModifyMethod.bind(CONNECTOR, Model, findOptions, {}, args, cbSpy)()
 
@@ -67,39 +57,27 @@ test('### Error collection.findAndModify - cb(err) ###', sinon.test(function (t)
   t.end()
 }))
 
-test('### Response collection.findAndModify ###', sinon.test(function (t) {
+test('### Response collection.findAndModify ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const record = {
   }
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findAndModify: (options, order, doc, args, cb) => {
-          cb(null, record)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findAndModify: (options, order, doc, args, cb) => {
+        cb(null, record)
       }
     }
-  )
+  })
 
-  const translateQueryKeysStub = this.stub(
-    CONNECTOR,
-    'translateQueryKeys',
-    (Model, options) => {
-      return options
-    }
-  )
+  const translateQueryKeysStub = this.stub(CONNECTOR, 'translateQueryKeys').callsFake((Model, options) => {
+    return options
+  })
 
-  const calculateQueryParamsStub = this.stub(
-    CONNECTOR,
-    'calculateQueryParams',
-    (options) => {
-      return options
-    }
-  )
+  const calculateQueryParamsStub = this.stub(CONNECTOR, 'calculateQueryParams').callsFake((options) => {
+    return options
+  })
 
   findAndModifyMethod.bind(CONNECTOR, Model, findOptions, {}, {}, cbSpy)()
 
@@ -110,32 +88,24 @@ test('### Response collection.findAndModify ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### createInstanceFromResult - response findAndModify method ###', sinon.test(function (t) {
+test('### createInstanceFromResult - response findAndModify method ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
   const record = {
     value: 'Test'
   }
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        findAndModify: (options, order, doc, args, cb) => {
-          cb(null, record)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      findAndModify: (options, order, doc, args, cb) => {
+        cb(null, record)
       }
     }
-  )
+  })
 
-  const createInstanceFromResultStub = this.stub(
-    CONNECTOR,
-    'createInstanceFromResult',
-    (Model, value) => {
-      return record
-    }
-  )
+  const createInstanceFromResultStub = this.stub(CONNECTOR, 'createInstanceFromResult').callsFake((Model, value) => {
+    return record
+  })
 
   findAndModifyMethod.bind(CONNECTOR, Model, findOptions, {}, {}, cbSpy)()
 

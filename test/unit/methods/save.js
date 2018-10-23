@@ -2,6 +2,8 @@ const test = require('tap').test
 const server = require('../../server')
 const saveMethod = require('./../../../lib/methods/save').save
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 const instance = {
   getPrimaryKey: () => {
     return 'id'
@@ -27,29 +29,21 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### collection.update error response ###', sinon.test(function (t) {
+test('### collection.update error response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        update: (query, record, cb) => {
-          cb(errorMessage)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      update: (query, record, cb) => {
+        cb(errorMessage)
       }
     }
-  )
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (instance) => {
-      return instance
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((instance) => {
+    return instance
+  })
 
   saveMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
@@ -61,29 +55,21 @@ test('### collection.update error response ###', sinon.test(function (t) {
   t.end()
 }))
 
-test('### collection.update response ###', sinon.test(function (t) {
+test('### collection.update response ###', testWrap(function (t) {
   const Model = ARROW.getModel('Posts')
   const cbSpy = this.spy()
 
-  const getCollectionStub = this.stub(
-    CONNECTOR,
-    'getCollection',
-    (Model) => {
-      return {
-        update: (query, record, cb) => {
-          cb(null, instance)
-        }
+  const getCollectionStub = this.stub(CONNECTOR, 'getCollection').callsFake((Model) => {
+    return {
+      update: (query, record, cb) => {
+        cb(null, instance)
       }
     }
-  )
+  })
 
-  const createPrimaryKeyQueryStub = this.stub(
-    CONNECTOR,
-    'createPrimaryKeyQuery',
-    (instance) => {
-      return instance
-    }
-  )
+  const createPrimaryKeyQueryStub = this.stub(CONNECTOR, 'createPrimaryKeyQuery').callsFake((instance) => {
+    return instance
+  })
   saveMethod.bind(CONNECTOR, Model, instance, cbSpy)()
 
   t.ok(cbSpy.calledOnce)

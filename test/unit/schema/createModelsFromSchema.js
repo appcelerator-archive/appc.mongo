@@ -1,6 +1,8 @@
 const test = require('tap').test
 const server = require('./../../server')
 const sinon = require('sinon')
+const sinonTest = require('sinon-test')
+const testWrap = sinonTest(sinon)
 var arrow = require('arrow')
 
 var ARROW
@@ -19,12 +21,12 @@ test('### Start Arrow ###', function (t) {
     })
 })
 
-test('### createModelsFromSchema ###', sinon.test(function (t) {
+test('### createModelsFromSchema ###', testWrap(function (t) {
   if (CONNECTOR.schema) { var temp = CONNECTOR.schema }
 
   CONNECTOR.schema = { objects: { test: 'test' } }
 
-  const extendModelStub = this.stub(arrow.Model, 'extend', () => {})
+  const extendModelStub = this.stub(arrow.Model, 'extend').callsFake(() => {})
 
   CONNECTOR.createModelsFromSchema()
 
